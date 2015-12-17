@@ -120,7 +120,7 @@ void(UpdateMainMenu())
 		{
 			cursorNum++;
 			cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y + cursorOffset));
-			SoundManager::Instance().PlaySFX(SoundManager::SoundsList::CURSOR_SOUND);
+			SoundManager::Instance().PlaySFX(SoundManager::SoundsList::CURSOR_SFX);
 		}
 	}
 
@@ -130,7 +130,7 @@ void(UpdateMainMenu())
 		{
 			cursorNum--;
 			cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y - cursorOffset));
-			SoundManager::Instance().PlaySFX(SoundManager::SoundsList::CURSOR_SOUND);
+			SoundManager::Instance().PlaySFX(SoundManager::SoundsList::CURSOR_SFX);
 		}
 	}
 
@@ -144,10 +144,12 @@ void(UpdateMainMenu())
 		else if (cursorNum == OPTIONS)
 		{
 			gameMode = OPTIONS;
+			SoundManager::Instance().PlaySFX(SoundManager::SoundsList::CONFIRM_SFX);
 		}
 		else if (cursorNum == SCORE)
 		{
 			gameMode = SCORE;
+			SoundManager::Instance().PlaySFX(SoundManager::SoundsList::CONFIRM_SFX);
 		}
 	}
 }

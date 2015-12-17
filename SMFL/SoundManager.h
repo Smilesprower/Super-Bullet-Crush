@@ -14,8 +14,9 @@ public:
 	enum SoundsList
 	{
 		BACKGROUND_MUSIC_LEVEL_1,
-		CURSOR_SOUND,
-		EXPLOSION_SOUND
+		CURSOR_SFX,
+		CONFIRM_SFX,
+		EXPLOSTION_SFX
 	};
 
 	static SoundManager& Instance();
@@ -35,7 +36,7 @@ public:
 	bool dopplerEnabaled;
 	bool reverbEnabled;
 	FMOD::Reverb *reverb;
-	
+
 
 private:
 	SoundManager();
@@ -43,6 +44,7 @@ private:
 	const static char* BACKGROUND_MUSIC_LVL_1;
 	const static char* CURSOR;
 	const static char* EXPLOSION;
+	const static char* CONFIRM;
 	float volume;
 	FMOD::System *FMODsys; //will point to the FMOD system
 	FMOD::System *FMODsys2;
@@ -51,5 +53,5 @@ private:
 	std::vector<FMOD::Sound*> sounds;
 	FMOD::Channel *channel;
 	FMOD::Channel *channel20;
-	FMOD_VECTOR sourcePos; 
+	FMOD_VECTOR sourcePos;
 };
