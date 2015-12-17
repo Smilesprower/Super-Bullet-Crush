@@ -34,8 +34,8 @@ private:
 	void AddSlowWave(sf::Vector2f p_screenDimensions);
 
 	//Enemy timer shit
-	const float m_TIME_BETWEEN_HOMING_WAVES = 150;
-	const float m_TIME_BETWEEN_SLOW_WAVES = 70;
+	const float m_TIME_BETWEEN_HOMING_WAVES = 150000;
+	const float m_TIME_BETWEEN_SLOW_WAVES = 700000;
 	float m_waveTimer = 0;
 	const int m_NUM_WAVES_BETWEEN_BOSS = 3;
 	int m_waveCounter = 5;

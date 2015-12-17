@@ -12,7 +12,7 @@ BulletManager::BulletManager()
 	m_SPIRAL_TEX_COORDS = sf::IntRect(0, 109, 10, 10);
 	m_SPREAD_TEX_COORDS = sf::IntRect(11, 109, 10, 10);
 	m_BLASTER_TEX_COORDS = sf::IntRect(67, 112, 22, 22);
-	m_LASER_TEX_COORDS = sf::IntRect(0, 109, 10, 10);
+	m_MISSILE_TEX_COORDS = sf::IntRect(132, 116, 12, 23);
 	m_DEFAULT_TEX_COORDS = sf::IntRect(0, 109, 10, 10);
 	m_pTextureAtlas = &m_textureAtlas;
 }
@@ -40,11 +40,10 @@ void BulletManager::Update(sf::Time p_deltaTime, sf::Vector2f p_screenDimensions
 			m_bulletGroups.erase(m_bulletGroups.begin() + i);
 	}
 
-	//for (int i = 0; i < m_bulletGroups.size(); i++)
-	//{
 
-	//}
 	m_playerBullets.Update(p_deltaTime, p_screenDimensions);
+	//if (m_playerBullets.HasDestroyedAMissile() != sf::Vector2f(-1, -1))
+		//AddExplosion(m_playerBullets.HasDestroyedAMissile(), 24);
 }
 
 void BulletManager::Draw(sf::RenderWindow& p_window)
@@ -77,9 +76,9 @@ void BulletManager::AddSpiral(sf::Vector2f p_point, int p_numColumns, bool p_sho
 	int j = 0;
 }
 
-void BulletManager::AddExplosion(sf::Vector2f p_point, int p_numColumns)
+void BulletManager::AddExplosion(sf::Vector2f p_point, int p_numColumns, sf::Vector2f p_direction)
 {
-	m_bulletGroups.push_back(new ExplosionBulletPattern(p_point, p_numColumns, 50, 4, m_pTextureAtlas, m_SPIRAL_TEX_COORDS));
+	m_bulletGroups.push_back(new ExplosionBulletPattern(p_point, p_numColumns, 10, 2, m_pTextureAtlas, m_SPIRAL_TEX_COORDS, p_direction));
 }
 
 int BulletManager::AddStraight(StraightBulletGroup *p_pattern, sf::Vector2f p_position, float p_velocity, sf::Vector2f p_direction)
@@ -91,8 +90,8 @@ void BulletManager::PlayerFireBullet(sf::Vector2f p_position, float p_velocity, 
 {
 	if (p_weaponType == WeaponType::BLASTER)
 		m_playerBullets.AddBullet(p_position, p_velocity, p_direction, m_pTextureAtlas, m_BLASTER_TEX_COORDS, p_radius, Bullet::BulletType::BLASTER);
-	else if (p_weaponType == WeaponType::LAZER)
-		m_playerBullets.AddBullet(p_position, p_velocity, p_direction, m_pTextureAtlas, m_LASER_TEX_COORDS, p_radius, Bullet::BulletType::LAZER);
+	else if (p_weaponType == WeaponType::MISSILE)
+		m_playerBullets.AddBullet(p_position, p_velocity, p_direction, m_pTextureAtlas, m_MISSILE_TEX_COORDS, p_radius, Bullet::BulletType::MISSILE);
 	else if (p_weaponType == WeaponType::SPREAD)
 		m_playerBullets.AddBullet(p_position, p_velocity, p_direction, m_pTextureAtlas, m_SPREAD_TEX_COORDS, p_radius, Bullet::BulletType::SPREAD);
 }

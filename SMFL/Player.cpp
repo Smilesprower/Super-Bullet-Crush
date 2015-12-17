@@ -4,8 +4,10 @@
 
 const float Player::m_ANIMTIMER = 30000;
 const float Player::m_BULLETDELAYTIMER = 80000;
+const float Player::m_MISSILEDELAYTIMER = 500000;
 const float Player::m_SPEED = 0.000005;
 const float Player::m_BULLETSPEED = 2.1;
+const float Player::m_MISSILE_BULLETSPEED = 1.5;
 const float Player::m_DEGTORAD = acos(-1) / 180;
 const float Player::m_SPREADANGLE = 10;
 const int Player::m_MAXTOWERS = 2;
@@ -46,7 +48,7 @@ m_invulnerableCounter(0),
 m_counterFordeathAnim(0),
 m_flashCounter(0),
 m_shouldBeHidden(false),
-m_weaponType(BulletManager::WeaponType::BLASTER)
+m_weaponType(BulletManager::WeaponType::MISSILE)
 {
 
 	m_origin = sf::Vector2f(m_position.x + m_WIDTH * 0.5f, m_position.y + m_HEIGHT * 0.5f);
@@ -111,20 +113,17 @@ void Player::Shoot(int towerNo)
 		sf::Vector2f direction = m_bulletVel * m_BULLETSPEED;
 		BulletManager::Instance().PlayerFireBullet(position, m_BULLETSPEED, direction, BulletManager::BLASTER, m_BLASTERRADIUS);
 	}
-	else if (m_weaponType == BulletManager::WeaponType::LAZER)
+	else if (m_weaponType == BulletManager::WeaponType::MISSILE)
 	{
 		// Radius of the imaginary circle where the bullets will meet
 		////////////////////////////////////
-		float magicCircle = 400;
 
-		sf::Vector2f newAngle = sf::Vector2f(cos(PlControls::Instance().m_rightAnalogAngle) * magicCircle + m_origin.x, sin(PlControls::Instance().m_rightAnalogAngle) * magicCircle + m_origin.y);
-		sf::Vector2f position = m_towers.at(towerNo).getOrigin(m_LAZERRADIUS) + (m_bulletVel * 5.0f);
 
-		float temp2 = atan2(newAngle.y - position.y, newAngle.x - position.x);
-		m_bulletVel = sf::Vector2f(cos(temp2), sin(temp2));
+		sf::Vector2f position = m_towers.at(towerNo).getOrigin(m_BLASTERRADIUS);
+		m_bulletVel = sf::Vector2f(cos(PlControls::Instance().m_rightAnalogAngle), sin(PlControls::Instance().m_rightAnalogAngle));
 
-		sf::Vector2f direction = m_bulletVel * m_BULLETSPEED;
-		BulletManager::Instance().PlayerFireBullet(position, m_BULLETSPEED, direction, BulletManager::LAZER, 5);
+		sf::Vector2f direction = m_bulletVel * m_MISSILE_BULLETSPEED;
+		BulletManager::Instance().PlayerFireBullet(position, m_BULLETSPEED, direction, BulletManager::MISSILE, 5);
 	}
 	else if (m_weaponType == BulletManager::WeaponType::DEFAULT)
 	{
@@ -200,10 +199,10 @@ void Player::UpdateAlive(float p_dt)
 
 	if (PlControls::Instance().m_buttons.at(9) && PlControls::Instance().m_buttons.at(9) != PlControls::Instance().m_buttonsPrev.at(9))
 	{
-		if (m_weaponType == BulletManager::WeaponType::BLASTER)
+		if (m_weaponType == BulletManager::WeaponType::MISSILE)
 			m_weaponType = BulletManager::WeaponType::SPREAD;
 		else
-			m_weaponType = BulletManager::WeaponType::BLASTER;
+			m_weaponType = BulletManager::WeaponType::MISSILE;
 	}
 
 	// Animate my Helicopter
@@ -245,9 +244,15 @@ void Player::UpdateAlive(float p_dt)
 		if (m_delay < 0)
 		{
 			for (int towerNo = 0; towerNo < m_MAXTOWERS; towerNo++)
-			if (m_towers.at(towerNo).getAlive())
-				Shoot(towerNo);
-			m_delay = m_BULLETDELAYTIMER;
+			{
+				if (m_towers.at(towerNo).getAlive())
+					Shoot(towerNo);
+			}
+
+			if (m_weaponType != BulletManager::MISSILE)
+				m_delay = m_BULLETDELAYTIMER;
+			else
+				m_delay = m_MISSILEDELAYTIMER;
 		}
 	}
 

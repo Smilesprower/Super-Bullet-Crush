@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "BulletGroup.h"
+#include "BulletManager.h"
 
 
 BulletGroup::BulletGroup()
@@ -16,6 +17,17 @@ BulletGroup::~BulletGroup()
 
 void BulletGroup::Update(sf::Time p_deltaTime, sf::Vector2f p_screenDimensions)
 {
+	m_hasDestroyedAMissile = sf::Vector2f(-1, -1);
+
+	for (int i = 0; i < m_bulletList.size(); i++)
+	{
+		if (m_bulletList.at(i).m_shouldBeDestroyed)
+		{
+			m_hasDestroyedAMissile = m_bulletList.at(i).GetPosition();
+			BulletManager::Instance().AddExplosion(m_bulletList.at(i).GetPosition(), 12, m_bulletList.at(i).GetVelocity());
+			m_bulletList.erase(m_bulletList.begin() + i);
+		}
+	}
 	for (int i = 0; i < m_bulletList.size(); i++)
 	{
 		m_bulletList.at(i).Update(p_deltaTime);
@@ -24,6 +36,7 @@ void BulletGroup::Update(sf::Time p_deltaTime, sf::Vector2f p_screenDimensions)
 		{
 			m_bulletList.erase(m_bulletList.begin() + i);
 		}
+
 	}
 }
 
@@ -45,4 +58,9 @@ void BulletGroup::SetShouldBeDestroyed(bool p_shouldBeDestroyed)
 bool BulletGroup::GetShouldBeDestroyed()
 {
 	return m_shouldBeDestroyed;
+}
+
+sf::Vector2f BulletGroup::HasDestroyedAMissile()
+{
+	return m_hasDestroyedAMissile;
 }

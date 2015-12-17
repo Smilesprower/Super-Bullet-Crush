@@ -37,7 +37,7 @@ void SoundManager::PlaySoundBG(SoundManager::SoundsList p_effect)
 		float volume = 1.0f;
 		FMODsys->playSound(FMOD_CHANNEL_REUSE, sounds.at(0), false, &channel);
 		channel->setVolume(volume);
-		channel->set3DMinMaxDistance(250, 10000);
+		channel->set3DMinMaxDistance(10000, 10000);
 
 		FMODsys->createReverb(&reverb);
 		FMOD_REVERB_PROPERTIES prop = FMOD_PRESET_SEWERPIPE;

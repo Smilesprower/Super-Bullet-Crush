@@ -15,7 +15,7 @@ public:
 	{
 		BLASTER,
 		SPREAD,
-		LAZER,
+		MISSILE,
 		DEFAULT
 	};
 
@@ -29,6 +29,9 @@ public:
 	sf::IntRect GetCollisionRect();
 	void SetPosition(sf::Vector2f p_pos);
 	Bullet::BulletType GetType();
+	bool m_shouldBeDestroyed;
+	sf::Vector2f GetVelocity();
+
 
 private:
 	sf::Vector2f m_position;
@@ -38,5 +41,7 @@ private:
 	sf::IntRect m_collisionRect;
 	static const float m_RADTODEG;
 	BulletType m_type;
+	static const float m_MAX_TIME_TO_LIVE;
+	float m_currentTimeLeft;
 };
 
