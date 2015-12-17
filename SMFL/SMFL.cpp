@@ -40,8 +40,9 @@
 
 // Game Modes
 //////////////////
-const byte MAINMENU = 0, GAME = 1, OPTIONS = 2, SCORE = 3, GAMEOVER = 4;
+const byte MAINMENU = 0, GAME = 1, OPTIONS = 2, SCORE = 3, GAMEOVER = 4, DISCONNECTED = 5;
 byte gameMode = MAINMENU;
+byte prevGameMode = gameMode;
 
 // Variables
 //////////////////
@@ -52,8 +53,8 @@ sf::Clock myClock;
 sf::Time deltaTime;
 Player player;
 Level level;
-sf::Texture m_tex, m_bgTex, mainTex, highScoreTex;
-sf::Sprite m_titleSpr, m_highScoreSpr;
+sf::Texture m_tex, m_bgTex, mainTex, highScoreTex, controllerDisconnectedTex;
+sf::Sprite m_titleSpr, m_highScoreSpr, disconnectedSpr;
 std::vector<sf::Texture> m_backGroundTex;
 sf::Vector2f screenDimensions = sf::Vector2f(600, 800);
 int fps = 0;
@@ -92,6 +93,11 @@ void LoadContent()
 	highScoreTex.loadFromFile("../resources/highscore.png");
 	m_highScoreSpr.setTexture(highScoreTex);
 	m_highScoreSpr.setTextureRect(sf::IntRect(0, 0, 600, 800));
+
+	controllerDisconnectedTex.loadFromFile("../resources/disconnected.png");
+	disconnectedSpr.setTexture(controllerDisconnectedTex);
+	disconnectedSpr.setTextureRect(sf::IntRect(0, 0, 600, 800));
+
 
 	for (int i = 0; i < m_MAXLEVELS; i++)
 	{
@@ -220,6 +226,11 @@ void(DrawScore(sf::RenderWindow &p_window))
 	p_window.draw(m_highScoreSpr);
 }
 
+void DrawDisconnected(sf::RenderWindow & p_window)
+{
+	p_window.draw(disconnectedSpr);
+}
+
 // UPDATE EVENT
 /////////////////////////////
 void Update()
@@ -231,7 +242,13 @@ void Update()
 
 	myClock.restart();
 
+	if (gameMode != prevGameMode && gameMode != DISCONNECTED)
+		prevGameMode = gameMode;
 
+	if (PlControls::Instance().CheckIfControllerIsConnected() == false)
+		gameMode = DISCONNECTED;
+	else
+		gameMode = prevGameMode;
 
 	// Update Game Modes
 	/////////////////////////////
@@ -251,6 +268,9 @@ void Update()
 		break;
 	case SCORE:
 		UpdateScore();
+		break;
+	case DISCONNECTED:
+
 		break;
 	}
 	SoundManager::Instance().UpdateSound(player.getPosition(), player.getVelocity());
@@ -282,6 +302,9 @@ void Draw(sf::RenderWindow &p_window)
 		break;
 	case SCORE:
 		DrawScore(p_window);
+		break;
+	case DISCONNECTED:
+		DrawDisconnected(p_window);
 		break;
 	}
 

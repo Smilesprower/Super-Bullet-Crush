@@ -7,15 +7,16 @@ PlControls::PlControls() :
 m_DEADZONEA(15),
 m_DEADZONEB(50),
 m_counter(0),
+m_isControllerConnected(true),
 m_buttonCount(sf::Joystick::getButtonCount(0))
 {
-	int count = sf::Joystick::getButtonCount(0);
-	for (int i = 0; i < count; i++)
+	m_buttons = std::vector<bool>();
+
+	for (int i = 0; i < 10; i++)
 	{
-		m_buttons.push_back(sf::Joystick::isButtonPressed(0, i));
+		m_buttons.push_back(false);
 		m_buttonsPrev.push_back(m_buttons.at(i));
 	}
-
 }
 
 sf::Vector2f PlControls::GetLeftStickAxis()
@@ -30,14 +31,20 @@ sf::Vector2f PlControls::GetRightStickAxis()
 
 PlControls& PlControls::Instance()
 {
-	static PlControls instance;
+	static PlControls instance = PlControls();
 	return instance;
 }
 
 void PlControls::Update(sf::Time p_deltaTime)
 {
+	if (sf::Joystick::isConnected(0) == false)
+		m_isControllerConnected = false;
+	else
+		m_isControllerConnected = true;
+
+
 	int count = sf::Joystick::getButtonCount(0);
-	for (int i = 0; i < count; i++)
+	for (int i = 0; i < sf::Joystick::getButtonCount(0); i++)
 	{
 		m_buttonsPrev.at(i) = m_buttons.at(i);
 
@@ -71,4 +78,9 @@ void PlControls::Update(sf::Time p_deltaTime)
 	}
 	else
 		m_rightStickEnabled = false;
+}
+
+bool PlControls::CheckIfControllerIsConnected()
+{
+	return m_isControllerConnected;
 }

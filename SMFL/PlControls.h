@@ -20,6 +20,9 @@ public:
 	int m_buttonCount;
 	std::vector<bool>m_buttons;
 	std::vector<bool>m_buttonsPrev;
+	bool m_isControllerConnected;
+
+	bool CheckIfControllerIsConnected();
 
 private:
 	PlControls();
