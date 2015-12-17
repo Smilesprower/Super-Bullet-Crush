@@ -24,7 +24,9 @@ void BulletGroup::Update(sf::Time p_deltaTime, sf::Vector2f p_screenDimensions)
 		if (m_bulletList.at(i).m_shouldBeDestroyed)
 		{
 			m_hasDestroyedAMissile = m_bulletList.at(i).GetPosition();
-			BulletManager::Instance().AddExplosion(m_bulletList.at(i).GetPosition(), 12, m_bulletList.at(i).GetVelocity());
+			// Need to take in a value for how many bullets are in the explody pattern
+			// I have coded the explosion to work with every number you throw at it.
+			BulletManager::Instance().AddExplosion(m_bulletList.at(i).GetPosition(), 24, m_bulletList.at(i).GetVelocity());
 			m_bulletList.erase(m_bulletList.begin() + i);
 		}
 	}
