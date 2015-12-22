@@ -46,6 +46,7 @@ byte prevGameMode = gameMode;
 
 // Variables
 //////////////////
+std::vector<std::string> test;
 sf::RectangleShape cursor;
 byte cursorNum = 1;
 byte cursorOffset = 62;
@@ -79,6 +80,9 @@ void Init()
 	BulletManager::Instance().Init(*&m_tex);
 	EnemyManager::Instance().Init(*&m_tex);
 	CollisionManager::Instance().Init();
+
+
+	//test = Score::Instance().SortHighScoreTable();
 }
 void LoadContent()
 {
@@ -166,7 +170,7 @@ void(UpdateGame())
 	Score::Instance().UpdateScores();
 	livesTxt.setString("x" + std::to_string(player.GetLivesNum()));
 	cScoreTxt.setString(Score::Instance().currentScoreText);
-	hScoreTxt.setString(Score::Instance().highScoresText.at(0));
+	hScoreTxt.setString(Score::Instance().highestScoreText);
 }
 void(UpdateGameOver())
 {
@@ -393,7 +397,6 @@ int main()
 		// Update World, Events, Game
 		/////////////////////////////
 		Update();
-		//FMODsys->update();
 
 		// Draw World, Events, Game
 		/////////////////////////////

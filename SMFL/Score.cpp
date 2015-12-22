@@ -30,15 +30,12 @@ void Score::Init()
 		}
 		myfile.close();
 	}
-
-	sf::Font font;
-	font.loadFromFile("C:\\Windows\\Fonts\\GARA.TTF");
-
 	for (int i = 0; i < highScores.size(); i++)
 	{
 		highScoresText.push_back(std::to_string(highScores.at(i)));
 		highScoresText.at(i) = std::string(9 - highScoresText.at(i).size(), '0') + highScoresText.at(i);
 	}
+	highestScoreText = highScoresText.at(0);
 }
 
 Score& Score::Instance()
@@ -49,15 +46,31 @@ Score& Score::Instance()
 
 void Score::UpdateScores()
 {
-	currentScoreText = std::to_string(currentScore);
-	currentScoreText = std::string(9 - currentScoreText.length(), '0') + currentScoreText;
+	currentScoreText = std::string(9 - std::to_string(currentScore).size(), '0') + std::to_string(currentScore);
 
 	if (currentScore > highScores.at(0))
-		highScoresText.at(0) = currentScoreText;
+		highestScoreText = currentScoreText;
 
 }
 
-void Score::SortHighScoreTable()
+std::vector<std::string> Score::GetAndSortHighScores()
 {
-
+	int placeInTable = 0;
+	int numOfLoops = highScores.size();
+	// Go through all scores
+	for (int i = 0; i < numOfLoops;)
+	{
+		// if current is greater then hiscore
+		if (currentScore > highScores.at(i))
+		{
+			// 5 = 4, 4 = 3, etc
+			for (int j = numOfLoops - 1; j > i; j--)
+				highScoresText.at(j) = highScoresText.at(j - 1);
+			highScoresText.at(i) = std::string(9 - std::to_string(currentScore).size(), '0') + std::to_string(currentScore);
+			break;
+		}
+		else
+			i++;
+	}
+	return highScoresText;
 }
