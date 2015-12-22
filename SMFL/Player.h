@@ -75,8 +75,7 @@ private:
 	sf::Texture * m_tex;
 	sf::IntRect m_spriteRect;
 	sf::Sprite m_playerSprite;
-	sf::Sprite m_playerBullet;
-	sf::Sprite m_playerLaser;
+	sf::Sprite m_wepSel;
 	StraightBulletGroup * m_pBulletlist;
 	StraightBulletGroup m_bulletList;
 	sf::IntRect m_collisionRect;

@@ -48,13 +48,19 @@ m_invulnerableCounter(0),
 m_counterFordeathAnim(0),
 m_flashCounter(0),
 m_shouldBeHidden(false),
-m_weaponType(BulletManager::WeaponType::MISSILE)
+m_weaponType(BulletManager::WeaponType::BLASTER)
 {
 
 	m_origin = sf::Vector2f(m_position.x + m_WIDTH * 0.5f, m_position.y + m_HEIGHT * 0.5f);
 	m_playerSprite.setTexture(p_tex);
 	m_playerSprite.setTextureRect(sf::IntRect(0, 0, m_WIDTH, m_HEIGHT));
 	m_playerSprite.setPosition(m_position);
+
+	m_wepSel.setTexture(p_tex);
+	m_wepSel.setTextureRect(sf::IntRect(148, 120, 34, 34));
+	m_wepSel.setPosition(sf::Vector2f(433, 42));
+	//434
+	//36 offset
 
 	// Setting Up Towers
 	///////////////////////////////
@@ -115,24 +121,11 @@ void Player::Shoot(int towerNo)
 	}
 	else if (m_weaponType == BulletManager::WeaponType::MISSILE)
 	{
-		// Radius of the imaginary circle where the bullets will meet
-		////////////////////////////////////
-
-
 		sf::Vector2f position = m_towers.at(towerNo).getOrigin(m_BLASTERRADIUS);
 		m_bulletVel = sf::Vector2f(cos(PlControls::Instance().m_rightAnalogAngle), sin(PlControls::Instance().m_rightAnalogAngle));
 
 		sf::Vector2f direction = m_bulletVel * m_MISSILE_BULLETSPEED;
 		BulletManager::Instance().PlayerFireBullet(position, m_BULLETSPEED, direction, BulletManager::MISSILE, 5);
-	}
-	else if (m_weaponType == BulletManager::WeaponType::DEFAULT)
-	{
-
-		sf::Vector2f position = m_towers.at(towerNo).getOrigin(m_BLASTERRADIUS);
-		m_bulletVel = sf::Vector2f(cos(PlControls::Instance().m_rightAnalogAngle), sin(PlControls::Instance().m_rightAnalogAngle));
-
-		sf::Vector2f direction = m_bulletVel * m_BULLETSPEED;
-		BulletManager::Instance().PlayerFireBullet(position, m_BULLETSPEED, direction, BulletManager::DEFAULT, m_SPREADRADIUS);
 	}
 }
 
@@ -156,6 +149,7 @@ std::vector<sf::Sprite> Player::getSprite()
 	for (int i = 0; i < m_MAXTOWERS; i++)
 	if (m_towers.at(i).getAlive())
 		sprites.push_back(m_towers.at(i).getSprite());
+	sprites.push_back(m_wepSel);
 
 
 	return sprites;
@@ -197,12 +191,35 @@ void Player::UpdateAlive(float p_dt)
 	else
 		m_shouldBeHidden = false;
 
+	// Right click analog - Change weapon to the right
+	//////////////////////////
 	if (PlControls::Instance().m_buttons.at(9) && PlControls::Instance().m_buttons.at(9) != PlControls::Instance().m_buttonsPrev.at(9))
 	{
-		if (m_weaponType == BulletManager::WeaponType::MISSILE)
+		if (m_weaponType == BulletManager::WeaponType::BLASTER)
+		{
 			m_weaponType = BulletManager::WeaponType::SPREAD;
-		else
+			m_wepSel.setPosition(sf::Vector2f(m_wepSel.getPosition().x + 36, m_wepSel.getPosition().y));
+		}
+		else if (m_weaponType == BulletManager::WeaponType::SPREAD)
+		{
 			m_weaponType = BulletManager::WeaponType::MISSILE;
+			m_wepSel.setPosition(sf::Vector2f(m_wepSel.getPosition().x + 36, m_wepSel.getPosition().y));
+		}
+	}
+	// Left click analog - Change weapon to the left
+	//////////////////////////
+	else if (PlControls::Instance().m_buttons.at(8) && PlControls::Instance().m_buttons.at(8) != PlControls::Instance().m_buttonsPrev.at(8))
+	{
+		if (m_weaponType == BulletManager::WeaponType::MISSILE)
+		{
+			m_weaponType = BulletManager::WeaponType::SPREAD;
+			m_wepSel.setPosition(sf::Vector2f(m_wepSel.getPosition().x - 36, m_wepSel.getPosition().y));
+		}
+		else if (m_weaponType == BulletManager::WeaponType::SPREAD)
+		{
+			m_weaponType = BulletManager::WeaponType::BLASTER;
+			m_wepSel.setPosition(sf::Vector2f(m_wepSel.getPosition().x - 36, m_wepSel.getPosition().y));
+		}
 	}
 
 	// Animate my Helicopter
@@ -237,22 +254,26 @@ void Player::UpdateAlive(float p_dt)
 				m_towers.at(towerNo).Update(m_velocity);
 		}
 	}
-	//Check state of joystick Analog B
+	// Check state of joystick Analog B
+	// Cannot fire when Invulnerable
 	/////////////////////////////////////////////
 	if (PlControls::Instance().m_rightStickEnabled)
 	{
-		if (m_delay < 0)
+		if (!m_isInvulnerable)
 		{
-			for (int towerNo = 0; towerNo < m_MAXTOWERS; towerNo++)
+			if (m_delay < 0)
 			{
-				if (m_towers.at(towerNo).getAlive())
-					Shoot(towerNo);
-			}
+				for (int towerNo = 0; towerNo < m_MAXTOWERS; towerNo++)
+				{
+					if (m_towers.at(towerNo).getAlive())
+						Shoot(towerNo);
+				}
 
-			if (m_weaponType != BulletManager::MISSILE)
-				m_delay = m_BULLETDELAYTIMER;
-			else
-				m_delay = m_MISSILEDELAYTIMER;
+				if (m_weaponType != BulletManager::MISSILE)
+					m_delay = m_BULLETDELAYTIMER;
+				else
+					m_delay = m_MISSILEDELAYTIMER;
+			}
 		}
 	}
 

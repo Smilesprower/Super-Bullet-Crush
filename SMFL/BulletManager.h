@@ -15,8 +15,8 @@ public:
 	enum WeaponType
 	{
 		BLASTER,
-		MISSILE,
 		SPREAD,
+		MISSILE,
 		DEFAULT
 	};
 
