@@ -46,10 +46,13 @@ byte prevGameMode = gameMode;
 
 // Variables
 //////////////////
-std::vector<std::string> test;
+std::vector<sf::Text> highscores(10);
 sf::RectangleShape cursor;
 byte cursorNum = 1;
 byte cursorOffset = 62;
+byte numOfHighScores = 10;
+bool updateScores = true;
+
 sf::Clock myClock;
 sf::Time deltaTime;
 Player player;
@@ -60,8 +63,7 @@ std::vector<sf::Texture> m_backGroundTex;
 sf::Vector2f screenDimensions = sf::Vector2f(600, 800);
 int fps = 0;
 sf::Font font;
-sf::Text text;
-sf::Text cScoreTxt, hScoreTxt, livesTxt;
+sf::Text text, cScoreTxt, hScoreTxt, livesTxt;
 ReverbButton reverbButton = ReverbButton(sf::IntRect(5, 690, 200, 20));
 ThreeDeeSoundButton threeDeeButton = ThreeDeeSoundButton(sf::IntRect(5, 750, 200, 20));
 DopplerButton dopplerButton = DopplerButton(sf::IntRect(5, 720, 200, 20));
@@ -81,8 +83,15 @@ void Init()
 	EnemyManager::Instance().Init(*&m_tex);
 	CollisionManager::Instance().Init();
 
+	// Set Up Text for highScores
+	for (int i = 0; i < numOfHighScores; i++)
+	{
+		highscores.at(i).setFont(font);
+		highscores.at(i).setPosition(sf::Vector2f(200, 100 + 50 * i));
+		highscores.at(i).setCharacterSize(30);
+	}
 
-	//test = Score::Instance().SortHighScoreTable();
+
 }
 void LoadContent()
 {
@@ -169,19 +178,37 @@ void(UpdateGame())
 		CollisionManager::Instance().CheckBossCollisions(player.GetCollisionBox());
 	Score::Instance().UpdateScores();
 	livesTxt.setString("x" + std::to_string(player.GetLivesNum()));
-	cScoreTxt.setString(Score::Instance().currentScoreText);
-	hScoreTxt.setString(Score::Instance().highestScoreText);
+	cScoreTxt.setString(Score::Instance().getCurrentScore());
+	hScoreTxt.setString(Score::Instance().getHighestScore());
 }
 void(UpdateGameOver())
 {
 }
 void(UpdateOptions())
 {
+	if (PlControls::Instance().m_buttons.at(1) && PlControls::Instance().m_buttons.at(1) != PlControls::Instance().m_buttonsPrev.at(1))
+	{
+		gameMode = MAINMENU;
+	}
 }
 void(UpdateScore())
 {
+	// Put in game over screen later on 
+	////////////////////////////////////
+	if (updateScores)
+	{
+		std::vector<std::string> temp;
+		temp = Score::Instance().GetAndSortHighScores();
+		for (int i = 0; i < numOfHighScores; i++)
+			highscores.at(i).setString(temp.at(i));
+		updateScores = false;
+	}
+
+
+
 	if (PlControls::Instance().m_buttons.at(1) && PlControls::Instance().m_buttons.at(1) != PlControls::Instance().m_buttonsPrev.at(1))
 	{
+		Score::Instance().SaveScoresToFile();
 		gameMode = MAINMENU;
 	}
 }
@@ -226,10 +253,12 @@ void(DrawGameOver(sf::RenderWindow &p_window))
 }
 void(DrawOptions(sf::RenderWindow &p_window))
 {
+
 }
 void(DrawScore(sf::RenderWindow &p_window))
 {
-	p_window.draw(m_highScoreSpr);
+	for (int i = 0; i < numOfHighScores; i++)
+		p_window.draw(highscores.at(i));
 }
 
 void DrawDisconnected(sf::RenderWindow & p_window)

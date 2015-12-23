@@ -1,41 +1,25 @@
 #include "stdafx.h"
 #include "Score.h"
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <iterator>
-#include "SFML\Graphics\Font.hpp"
-#include "SFML\Graphics\Text.hpp"
+
 
 Score::Score() : currentScore(0)
 {
 }
 void Score::Init()
 {
-	highScores = std::vector<int>();
-	highScoresText = std::vector<std::string>();
-
 	std::string line;
 	std::ifstream myfile("../resources/highscores.txt");
 	if (myfile.is_open())
 	{
-		while (std::getline(myfile, line))
-		{
-			std::istringstream iss(line);
-			int n;
-			while (iss >> n)
-			{
-				highScores.push_back(n);
-			}
-		}
+		std::string str;
+		while (std::getline(myfile, str))
+			highScoresText.push_back(str);
 		myfile.close();
 	}
-	for (int i = 0; i < highScores.size(); i++)
-	{
-		highScoresText.push_back(std::to_string(highScores.at(i)));
+	for (int i = 0; i < highScoresText.size(); i++)
 		highScoresText.at(i) = std::string(9 - highScoresText.at(i).size(), '0') + highScoresText.at(i);
-	}
 	highestScoreText = highScoresText.at(0);
+	highestScore = stoi(highestScoreText);
 }
 
 Score& Score::Instance()
@@ -48,22 +32,27 @@ void Score::UpdateScores()
 {
 	currentScoreText = std::string(9 - std::to_string(currentScore).size(), '0') + std::to_string(currentScore);
 
-	if (currentScore > highScores.at(0))
+	if (currentScore > highestScore)
 		highestScoreText = currentScoreText;
 
 }
 
+/* 
+	Method to insert the current score 
+	once its greater than any previous highscores.
+	Instead of using a sort method we push the 
+	scores down the leaderboard
+*/
 std::vector<std::string> Score::GetAndSortHighScores()
 {
-	int placeInTable = 0;
-	int numOfLoops = highScores.size();
+	int numOfLoops = highScoresText.size();
 	// Go through all scores
 	for (int i = 0; i < numOfLoops;)
 	{
 		// if current is greater then hiscore
-		if (currentScore > highScores.at(i))
+		if (currentScore > stoi(highScoresText.at(i)))
 		{
-			// 5 = 4, 4 = 3, etc
+			// score 3 becomes score 4 etc
 			for (int j = numOfLoops - 1; j > i; j--)
 				highScoresText.at(j) = highScoresText.at(j - 1);
 			highScoresText.at(i) = std::string(9 - std::to_string(currentScore).size(), '0') + std::to_string(currentScore);
@@ -72,5 +61,30 @@ std::vector<std::string> Score::GetAndSortHighScores()
 		else
 			i++;
 	}
+	// Reset Scores so there updated for next game
+	currentScore = 0;
+	highestScoreText = highScoresText.at(0);
+	highestScore = stoi(highestScoreText);
+
 	return highScoresText;
+}
+
+void Score::SaveScoresToFile()
+{
+	int numOfLoops = highScoresText.size();
+	std::ofstream myfile("../resources/highscores.txt");
+
+	for (int i = 0; i < numOfLoops; i++)
+		myfile << highScoresText.at(i) << std::endl;
+
+	myfile.close();
+}
+
+std::string Score::getCurrentScore()
+{
+	return currentScoreText;
+}
+std::string Score::getHighestScore()
+{
+	return highestScoreText;
 }
