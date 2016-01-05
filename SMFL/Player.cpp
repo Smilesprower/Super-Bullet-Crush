@@ -3,7 +3,8 @@
 #include "BulletManager.h"
 
 const float Player::m_ANIMTIMER = 30000;
-const float Player::m_BULLETDELAYTIMER = 80000;
+const float Player::m_BLASTERDELAYTIMER = 200000;
+const float Player::m_SPREADDELAYTIMER = 150000;
 const float Player::m_MISSILEDELAYTIMER = 500000;
 const float Player::m_SPEED = 0.000005;
 const float Player::m_BULLETSPEED = 2.1;
@@ -263,16 +264,19 @@ void Player::UpdateAlive(float p_dt)
 		{
 			if (m_delay < 0)
 			{
+				SoundManager::Instance().PlaySFX(SoundManager::SHOOT_SFX);
 				for (int towerNo = 0; towerNo < m_MAXTOWERS; towerNo++)
 				{
 					if (m_towers.at(towerNo).getAlive())
 						Shoot(towerNo);
 				}
 
-				if (m_weaponType != BulletManager::MISSILE)
-					m_delay = m_BULLETDELAYTIMER;
-				else
+				if (m_weaponType == BulletManager::MISSILE)
 					m_delay = m_MISSILEDELAYTIMER;
+				else if (m_weaponType == BulletManager::BLASTER)
+					m_delay = m_BLASTERDELAYTIMER;
+				else if (m_weaponType == BulletManager::SPREAD)
+					m_delay = m_SPREADDELAYTIMER;
 			}
 		}
 	}

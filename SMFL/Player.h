@@ -9,6 +9,7 @@
 #include "PlControls.h"
 #include "Tower.h"
 #include "BulletManager.h"
+#include "SoundManager.h"
 
 #pragma once
 
@@ -96,8 +97,8 @@ private:
 
 	static const float m_COLLISIONBOXWIDTH;
 	static const float m_COLLISIONBOXHEIGHT;
-	static const float m_ANIMTIMER, m_BULLETDELAYTIMER;
-	static const float m_SPEED, m_BULLETSPEED, m_MISSILE_BULLETSPEED, m_MISSILEDELAYTIMER;
+	static const float m_ANIMTIMER, m_SPREADDELAYTIMER, m_MISSILEDELAYTIMER, m_BLASTERDELAYTIMER ;
+	static const float m_SPEED, m_BULLETSPEED, m_MISSILE_BULLETSPEED;
 	static const int m_WIDTH, m_HEIGHT, m_MAXFRAMES, m_MAXTOWERS;
 	static const float m_DEGTORAD, m_SPREADANGLE;
 	static const int m_BLASTERRADIUS, m_SPREADRADIUS, m_LAZERRADIUS;

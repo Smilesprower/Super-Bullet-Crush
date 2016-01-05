@@ -16,7 +16,8 @@ public:
 		BACKGROUND_MUSIC_LEVEL_1,
 		CURSOR_SFX,
 		CONFIRM_SFX,
-		EXPLOSTION_SFX
+		EXPLOSTION_SFX,
+		SHOOT_SFX
 	};
 
 	static SoundManager& Instance();
@@ -45,6 +46,7 @@ private:
 	const static char* CURSOR;
 	const static char* EXPLOSION;
 	const static char* CONFIRM;
+	const static char* SHOOT;
 	float volume;
 	FMOD::System *FMODsys; //will point to the FMOD system
 	FMOD::System *FMODsys2;
