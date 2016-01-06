@@ -35,7 +35,7 @@ private:
 
 	//Enemy timer shit
 	const float m_TIME_BETWEEN_HOMING_WAVES = 150;
-	const float m_TIME_BETWEEN_SLOW_WAVES = 700;
+	const float m_TIME_BETWEEN_SLOW_WAVES = 150;
 	float m_waveTimer = 0;
 	const int m_NUM_WAVES_BETWEEN_BOSS = 3;
 	int m_waveCounter = 50;

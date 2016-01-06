@@ -17,11 +17,13 @@ const int Player::m_WIDTH = 64;
 const int Player::m_HEIGHT = 78;
 const float Player::m_COLLISIONBOXWIDTH = 25;
 const float Player::m_COLLISIONBOXHEIGHT = 25;
-const int Player::m_DEATHANIMTIMER = 90000;
+const int Player::m_DEATHANIMTIMER = 25000;
 const int Player::m_MAXEXPFRAMES = 7;
-const int Player::m_EXPSIZE = 40;
+const int Player::m_EXPSIZEX = 48;
+const int Player::m_EXPSIZEY = 64;
 const int Player::m_FLASH_TIMER = 20000;
-const int Player::m_TEXOFFSETY = 156;
+const int Player::m_TEXOFFSETX = 182;
+const int Player::m_TEXOFFSETY = 89;
 const int Player::m_INVULNERABLE_LENGTH = 2500000;
 const int Player::m_BLASTERRADIUS = 11;
 const int Player::m_SPREADRADIUS = 5;
@@ -49,6 +51,8 @@ m_invulnerableCounter(0),
 m_counterFordeathAnim(0),
 m_flashCounter(0),
 m_shouldBeHidden(false),
+m_changePos(false),
+m_noOfExp(0),
 m_weaponType(BulletManager::WeaponType::BLASTER)
 {
 
@@ -313,19 +317,33 @@ void Player::UpdateAnim(float p_dt)
 {
 	m_counterFordeathAnim += p_dt;
 
+
 	if (m_counterFordeathAnim > m_DEATHANIMTIMER)
 	{
 		m_currentFrame++;
 		m_counterFordeathAnim = 0;
+		m_animBox = sf::IntRect(m_TEXOFFSETX + (m_EXPSIZEX * m_currentFrame), m_TEXOFFSETY, m_EXPSIZEX, m_EXPSIZEY);
+		m_playerSprite.setTextureRect(m_animBox);
+
+		if (!m_changePos)
+		{
+			SoundManager::Instance().PlaySFX(SoundManager::PLAYEREXPLOSION_SFX);
+			m_playerSprite.setPosition(m_position.x + 7, m_position.y + 12);
+			m_changePos = true;
+		}
+
 		if (m_currentFrame > m_MAXEXPFRAMES)
 		{
-			m_aliveState = AliveState::DEAD;
+			m_noOfExp++;
 			m_currentFrame = 0;
+			m_changePos = false;
+			if (m_noOfExp == 4)
+			{
+				m_aliveState = AliveState::DEAD;
+				m_noOfExp = 0;
+			}
 		}
 	}
-	m_animBox = sf::IntRect(m_EXPSIZE * m_currentFrame, m_TEXOFFSETY, m_EXPSIZE, m_EXPSIZE);
-	m_playerSprite.setTextureRect(m_animBox);
-	m_playerSprite.setPosition(m_position.x + m_playerSprite.getGlobalBounds().width / 3, m_position.y + m_playerSprite.getGlobalBounds().height / 3);
 }
 
 bool Player::CheckIfInvulnerable()

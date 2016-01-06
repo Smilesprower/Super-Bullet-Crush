@@ -88,13 +88,20 @@ private:
 	static const int m_FLASH_TIMER;
 	bool m_shouldBeHidden;
 
+
+	// Jay was here tested shtuff
+	//////////////////////////////////////
+	bool m_changePos;
+	int m_noOfExp;
+
 	static const int m_DEATHANIMTIMER;
 	float m_counterFordeathAnim;
 	static const int m_MAXEXPFRAMES;
 	sf::IntRect m_animBox;
-	static const int m_EXPSIZE;
+	static const int m_EXPSIZEX;
+	static const int m_EXPSIZEY;
 	static const int m_TEXOFFSETY;
-
+	static const int m_TEXOFFSETX;
 	static const float m_COLLISIONBOXWIDTH;
 	static const float m_COLLISIONBOXHEIGHT;
 	static const float m_ANIMTIMER, m_SPREADDELAYTIMER, m_MISSILEDELAYTIMER, m_BLASTERDELAYTIMER ;
