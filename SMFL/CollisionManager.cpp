@@ -39,16 +39,22 @@ CollisionManager& CollisionManager::Instance()
 	return instance;
 }
 
-void EnemyPlayer(sf::IntRect p_playerRect)
+void EnemyPlayer(Player * p_player)
 {
 	int enemNum = EnemyManager::Instance().GetEnemyList()->size();
+	bool hasBeenHit = false;
 
-	for (int i = 0; i < enemNum; i++)
+	for (int i = 0; i < EnemyManager::Instance().GetEnemyList()->size(); i++)
 	{
 		sf::IntRect enemRect = EnemyManager::Instance().GetEnemyList()->at(i)->GetCollisionBox();
-		if (p_playerRect.intersects(enemRect))
+		if (p_player->GetCollisionBox().intersects(enemRect) && 
+			p_player->GetAliveState() == Player::AliveState::ALIVE && 
+			p_player->CheckIfInvulnerable() == false &&
+			hasBeenHit == false)
 		{
-			int j = 0;
+			EnemyManager::Instance().GetEnemyList()->at(i)->ReduceHealth(1000);
+			p_player->SetAliveState(Player::AliveState::PLAYING_ANIM);
+			hasBeenHit = true;
 		}
 
 	}
@@ -73,8 +79,7 @@ void CollisionManager::PlBulletEnemy()
 		{
 			sf::IntRect bulletRect = BulletManager::Instance().GetPlBulletList()->m_bulletList.at(j).GetCollisionRect();
 			if (enemyRect.intersects(bulletRect) 
-				&& EnemyManager::Instance().GetEnemyList()->at(i)->GetAliveState() == Enemy::AliveState::IS_ALIVE 
-				&& BulletManager::Instance().GetPlBulletList()->m_bulletList.at(j).GetType() != Bullet::BulletType::MISSILE)
+				&& EnemyManager::Instance().GetEnemyList()->at(i)->GetAliveState() == Enemy::AliveState::IS_ALIVE)
 			{
 				bool hasAddedIndex = false;
 				for (int k = 0; k < correspondingList.size(); k++)
@@ -96,6 +101,14 @@ void CollisionManager::PlBulletEnemy()
 		{
 			if (&BulletManager::Instance().GetPlBulletList()->m_bulletList.at(j) == correspondingList.at(i).m_bull)
 			{
+				if (BulletManager::Instance().GetPlBulletList()->m_bulletList.at(j).GetType() == Bullet::MISSILE)
+				{
+					BulletManager::Instance().AddExplosion(BulletManager::Instance().GetPlBulletList()->m_bulletList.at(j).GetPosition(),
+						24,
+						BulletManager::Instance().GetPlBulletList()->m_bulletList.at(j).GetVelocity());
+
+				}
+
 				BulletManager::Instance().GetPlBulletList()->m_bulletList.erase(BulletManager::Instance().GetPlBulletList()->m_bulletList.begin() + j);
 			}
 		}
@@ -107,13 +120,19 @@ void CollisionManager::PlBulletEnemy()
 			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(10);
 
 		else if (correspondingList.at(i).m_bull->GetType() == Bullet::SPREAD)
+			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(2);
+
+		else if (correspondingList.at(i).m_bull->GetType() == Bullet::AFTER_MISS)
 			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(1);
+
+		else if (correspondingList.at(i).m_bull->GetType() == Bullet::MISSILE)
+			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(100);
 	}
 }
 
-void CollisionManager::CheckCollisions(sf::IntRect p_playerRect)
+void CollisionManager::CheckCollisions(sf::IntRect p_playerRect, Player * p_player)
 {
-	EnemyPlayer(p_playerRect);
+	EnemyPlayer(p_player);
 	PlBulletEnemy();
 }
 
@@ -169,6 +188,9 @@ void CollisionManager::CheckBossCollisions(sf::IntRect p_playerPos)
 
 		else if (correspondingList.at(i).m_bull->GetType() == Bullet::SPREAD)
 			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(1);
+
+		else if (correspondingList.at(i).m_bull->GetType() == Bullet::AFTER_MISS)
+			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(10);
 	}
 }
 
@@ -182,9 +204,12 @@ void CollisionManager::EnemBulletPl(Player * p_player)
 	for (int i = 0; i < BulletManager::Instance().GetBulletList()->size(); i++)
 	{
 		for (int j = 0; j < BulletManager::Instance().GetBulletList()->at(i)->m_bulletList.size(); j++)
-		{
-			bullList.push_back(&BulletManager::Instance().GetBulletList()->at(i)->m_bulletList.at(j));
-			bulletNum++;
+		{ 
+			if (BulletManager::Instance().GetBulletList()->at(i)->IsPlayerOwned() == false)
+			{
+				bullList.push_back(&BulletManager::Instance().GetBulletList()->at(i)->m_bulletList.at(j));
+				bulletNum++;
+			}
 		}
 	}
 

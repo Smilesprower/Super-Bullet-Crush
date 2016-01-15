@@ -172,7 +172,7 @@ void(UpdateGame())
 	player.Update(deltaTime.asMicroseconds());
 	BulletManager::Instance().Update(deltaTime, screenDimensions);
 	EnemyManager::Instance().Update(player.getPosition(), deltaTime.asMicroseconds(), screenDimensions);
-	CollisionManager::Instance().CheckCollisions(player.GetCollisionBox());
+	CollisionManager::Instance().CheckCollisions(player.GetCollisionBox(), &player);
 	CollisionManager::Instance().EnemBulletPl(&player);
 	if (EnemyManager::Instance().ShouldCheckBoss())
 		CollisionManager::Instance().CheckBossCollisions(player.GetCollisionBox());

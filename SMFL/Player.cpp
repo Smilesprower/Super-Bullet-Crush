@@ -130,7 +130,7 @@ void Player::Shoot(int towerNo)
 		m_bulletVel = sf::Vector2f(cos(PlControls::Instance().m_rightAnalogAngle), sin(PlControls::Instance().m_rightAnalogAngle));
 
 		sf::Vector2f direction = m_bulletVel * m_MISSILE_BULLETSPEED;
-		BulletManager::Instance().PlayerFireBullet(position, m_BULLETSPEED, direction, BulletManager::MISSILE, 5);
+		BulletManager::Instance().PlayerFireBullet(position, m_BULLETSPEED, direction, BulletManager::MISSILE, 6);
 	}
 }
 

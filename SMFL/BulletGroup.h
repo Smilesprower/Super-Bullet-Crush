@@ -16,6 +16,7 @@ public:
 	bool ShouldBeDestroyed();
 	void AddBullet(sf::Vector2f p_position, float p_velocity, sf::Vector2f p_direction, sf::Texture *&p_tex, sf::IntRect p_texCoords){}
 	sf::Vector2f HasDestroyedAMissile();
+	bool IsPlayerOwned();
 
 protected:
 	sf::Vector2f m_position;
@@ -23,6 +24,7 @@ protected:
 	bool m_shouldBeDestroyed;
 	sf::Rect<float> m_textureCoords;
 	sf::Vector2f m_hasDestroyedAMissile;
+	bool m_isPlayerOwned = false;
 
 
 };

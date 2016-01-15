@@ -2,6 +2,7 @@
 #include "ExplosionBulletPattern.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include "BulletManager.h"
 
 float theDistFormula(sf::Vector2f x, sf::Vector2f y)
 {
@@ -15,12 +16,15 @@ float theDistFormula(sf::Vector2f x, sf::Vector2f y)
 	return distance;
 }
 
-ExplosionBulletPattern::ExplosionBulletPattern(sf::Vector2f p_position, int p_numColumns, int p_radius, float p_velocity, sf::Texture *&p_tex, sf::IntRect p_texCoords, sf::Vector2f p_direction)
+ExplosionBulletPattern::ExplosionBulletPattern(sf::Vector2f p_position, int p_numColumns, int p_radius, float p_velocity, sf::Texture *&p_tex, sf::IntRect p_texCoords, sf::Vector2f p_direction, bool p_isPlayer)
 :m_velocity(p_velocity)
 {
 
 	// Jay was here making shit happen, enjoy your new mad bullets.
 	///////////////////////////////////////////////////////////////
+	
+	m_isPlayerOwned = p_isPlayer;
+
 	m_columnCount = p_numColumns;
 	int loopNum = m_columnCount * 0.5f;
 
@@ -41,7 +45,7 @@ ExplosionBulletPattern::ExplosionBulletPattern(sf::Vector2f p_position, int p_nu
 		sf::Vector2f velDir = pointOnCircle;
 		sf::Vector2f vel = velDir * m_velocity;
 		pointOnCircle = sf::Vector2f(cos(currAng) * m_bulletRadius + m_position.x, sin(currAng) * m_bulletRadius + m_position.y);
-		m_bulletList.push_back(Bullet(pointOnCircle, vel, p_tex, p_texCoords));
+		BulletManager::Instance().GetPlBulletList()->m_bulletList.push_back(Bullet(pointOnCircle, vel, p_tex, p_texCoords, 5, Bullet::AFTER_MISS));
 	}
 }
 

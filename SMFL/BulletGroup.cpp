@@ -66,3 +66,8 @@ sf::Vector2f BulletGroup::HasDestroyedAMissile()
 {
 	return m_hasDestroyedAMissile;
 }
+
+bool BulletGroup::IsPlayerOwned()
+{
+	return m_isPlayerOwned;
+}

@@ -78,8 +78,7 @@ void BulletManager::AddSpiral(sf::Vector2f p_point, int p_numColumns, bool p_sho
 
 void BulletManager::AddExplosion(sf::Vector2f p_point, int p_numColumns, sf::Vector2f p_direction)
 {
-
-	m_bulletGroups.push_back(new ExplosionBulletPattern(p_point, p_numColumns, 10, 2, m_pTextureAtlas, m_SPIRAL_TEX_COORDS, p_direction));
+	m_bulletGroups.push_back(new ExplosionBulletPattern(p_point, p_numColumns, 10, 2, m_pTextureAtlas, m_SPREAD_TEX_COORDS, p_direction, true));
 }
 
 int BulletManager::AddStraight(StraightBulletGroup *p_pattern, sf::Vector2f p_position, float p_velocity, sf::Vector2f p_direction)

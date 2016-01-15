@@ -14,7 +14,7 @@ public:
 
 	static CollisionManager& Instance();
 
-	void CheckCollisions(sf::IntRect p_playerPos);
+	void CheckCollisions(sf::IntRect p_playerPos, Player * p_player);
 	void CheckBossCollisions(sf::IntRect p_playerPos);
 	void EnemBulletPl(Player * p_player);
 private:

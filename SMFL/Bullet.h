@@ -16,6 +16,7 @@ public:
 		BLASTER,
 		SPREAD,
 		MISSILE,
+		AFTER_MISS,
 		DEFAULT
 	};
 
