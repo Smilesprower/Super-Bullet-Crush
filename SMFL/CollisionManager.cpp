@@ -89,6 +89,7 @@ void CollisionManager::PlBulletEnemy()
 					if (correspondingList.at(k).m_enemIndex == i)
 						hasAddedIndex = true;
 				}
+
 				if (!hasAddedIndex)
 					correspondingList.push_back(CorrespondingEnem(&BulletManager::Instance().GetPlBulletList()->m_bulletList.at(j), i));
 			}
@@ -120,7 +121,7 @@ void CollisionManager::PlBulletEnemy()
 			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(10);
 
 		else if (correspondingList.at(i).m_bull->GetType() == Bullet::SPREAD)
-			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(2);
+			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(3);
 
 		else if (correspondingList.at(i).m_bull->GetType() == Bullet::AFTER_MISS)
 			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(1);
@@ -183,14 +184,18 @@ void CollisionManager::CheckBossCollisions(sf::IntRect p_playerPos)
 
 	for (int i = 0; i < correspondingList.size(); i++)
 	{
+
 		if (correspondingList.at(i).m_bull->GetType() == Bullet::BLASTER)
 			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(10);
 
 		else if (correspondingList.at(i).m_bull->GetType() == Bullet::SPREAD)
-			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(1);
+			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(3);
 
 		else if (correspondingList.at(i).m_bull->GetType() == Bullet::AFTER_MISS)
-			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(10);
+			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(1);
+
+		else if (correspondingList.at(i).m_bull->GetType() == Bullet::MISSILE)
+			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(30);
 	}
 }
 

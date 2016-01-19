@@ -19,7 +19,7 @@ SlowShootyEnem::SlowShootyEnem(sf::Vector2f p_position, sf::Texture * p_tex, sf:
 	m_shotTimer = (int(std::rand()) % (int)2000) * (m_TIME_BETWEEN_SHOTS / 2000);
 	m_bulletGroup = new StraightBulletGroup();
 	BulletManager::Instance().AddBulletGroup(*m_bulletGroup);
-	m_health = 4;
+	m_health = 20;
 }
 
 
