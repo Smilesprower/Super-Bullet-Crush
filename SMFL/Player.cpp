@@ -28,6 +28,7 @@ const int Player::m_INVULNERABLE_LENGTH = 2500000;
 const int Player::m_BLASTERRADIUS = 11;
 const int Player::m_SPREADRADIUS = 5;
 const int Player::m_LAZERRADIUS = 64;
+const int Player::m_MISSILERADIUS = 6;
 
 const int Player::m_MAX_LIVES = 5;
 
@@ -126,11 +127,11 @@ void Player::Shoot(int towerNo)
 	}
 	else if (m_weaponType == BulletManager::WeaponType::MISSILE)
 	{
-		sf::Vector2f position = m_towers.at(towerNo).getOrigin(m_BLASTERRADIUS);
+		sf::Vector2f position = m_towers.at(towerNo).getOrigin(m_MISSILERADIUS);
 		m_bulletVel = sf::Vector2f(cos(PlControls::Instance().m_rightAnalogAngle), sin(PlControls::Instance().m_rightAnalogAngle));
 
 		sf::Vector2f direction = m_bulletVel * m_MISSILE_BULLETSPEED;
-		BulletManager::Instance().PlayerFireBullet(position, m_BULLETSPEED, direction, BulletManager::MISSILE, 6);
+		BulletManager::Instance().PlayerFireBullet(position, m_BULLETSPEED, direction, BulletManager::MISSILE, m_MISSILERADIUS);
 	}
 }
 

@@ -108,5 +108,5 @@ private:
 	static const float m_SPEED, m_BULLETSPEED, m_MISSILE_BULLETSPEED;
 	static const int m_WIDTH, m_HEIGHT, m_MAXFRAMES, m_MAXTOWERS;
 	static const float m_DEGTORAD, m_SPREADANGLE;
-	static const int m_BLASTERRADIUS, m_SPREADRADIUS, m_LAZERRADIUS;
+	static const int m_BLASTERRADIUS, m_SPREADRADIUS, m_LAZERRADIUS, m_MISSILERADIUS;
 };

@@ -57,8 +57,8 @@ sf::Clock myClock;
 sf::Time deltaTime;
 Player player;
 Level level;
-sf::Texture m_tex, m_bgTex, mainTex, highScoreTex, controllerDisconnectedTex;
-sf::Sprite m_titleSpr, m_highScoreSpr, disconnectedSpr;
+sf::Texture m_tex, m_bgTex, mainTex, highScoreTex, controllerDisconnectedTex, controlsTex;
+sf::Sprite m_titleSpr, highscoreSpr, disconnectedSpr, controlsSpr;
 std::vector<sf::Texture> m_backGroundTex;
 sf::Vector2f screenDimensions = sf::Vector2f(600, 800);
 int fps = 0;
@@ -87,7 +87,7 @@ void Init()
 	for (int i = 0; i < numOfHighScores; i++)
 	{
 		highscores.at(i).setFont(font);
-		highscores.at(i).setPosition(sf::Vector2f(200, 100 + 50 * i));
+		highscores.at(i).setPosition(sf::Vector2f(220, 220 + 40 * i));
 		highscores.at(i).setCharacterSize(30);
 	}
 
@@ -104,12 +104,17 @@ void LoadContent()
 	m_titleSpr.setTextureRect(sf::IntRect(0, 0, 600, 800));
 
 	highScoreTex.loadFromFile("../resources/highscore.png");
-	m_highScoreSpr.setTexture(highScoreTex);
-	m_highScoreSpr.setTextureRect(sf::IntRect(0, 0, 600, 800));
+	highscoreSpr.setTexture(highScoreTex);
+	highscoreSpr.setTextureRect(sf::IntRect(0, 0, 600, 800));
 
 	controllerDisconnectedTex.loadFromFile("../resources/disconnected.png");
 	disconnectedSpr.setTexture(controllerDisconnectedTex);
 	disconnectedSpr.setTextureRect(sf::IntRect(0, 0, 600, 800));
+
+
+	controlsTex.loadFromFile("../resources/controls.png");
+	controlsSpr.setTexture(controlsTex);
+	controlsSpr.setTextureRect(sf::IntRect(0, 0, 600, 800));
 
 
 	for (int i = 0; i < m_MAXLEVELS; i++)
@@ -156,7 +161,9 @@ void(UpdateMainMenu())
 		}
 		else if (cursorNum == OPTIONS)
 		{
+			cursorNum++;
 			gameMode = OPTIONS;
+			cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y + cursorOffset));
 			SoundManager::Instance().PlaySFX(SoundManager::SoundsList::CONFIRM_SFX);
 		}
 		else if (cursorNum == SCORE)
@@ -186,9 +193,11 @@ void(UpdateGameOver())
 }
 void(UpdateOptions())
 {
-	if (PlControls::Instance().m_buttons.at(1) && PlControls::Instance().m_buttons.at(1) != PlControls::Instance().m_buttonsPrev.at(1))
+	if (PlControls::Instance().m_buttons.at(0) && PlControls::Instance().m_buttons.at(0) != PlControls::Instance().m_buttonsPrev.at(0))
 	{
 		gameMode = MAINMENU;
+		cursorNum--;
+		cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y - cursorOffset));
 	}
 }
 void(UpdateScore())
@@ -206,7 +215,7 @@ void(UpdateScore())
 
 
 
-	if (PlControls::Instance().m_buttons.at(1) && PlControls::Instance().m_buttons.at(1) != PlControls::Instance().m_buttonsPrev.at(1))
+	if (PlControls::Instance().m_buttons.at(0) && PlControls::Instance().m_buttons.at(0) != PlControls::Instance().m_buttonsPrev.at(0))
 	{
 		Score::Instance().SaveScoresToFile();
 		gameMode = MAINMENU;
@@ -253,10 +262,14 @@ void(DrawGameOver(sf::RenderWindow &p_window))
 }
 void(DrawOptions(sf::RenderWindow &p_window))
 {
-
+	p_window.draw(controlsSpr);
+	p_window.draw(cursor);
 }
 void(DrawScore(sf::RenderWindow &p_window))
 {
+	p_window.draw(highscoreSpr);
+	p_window.draw(cursor);
+
 	for (int i = 0; i < numOfHighScores; i++)
 		p_window.draw(highscores.at(i));
 }

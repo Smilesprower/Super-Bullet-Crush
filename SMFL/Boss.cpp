@@ -5,14 +5,14 @@ const sf::Vector2f Boss::m_END_POS = sf::Vector2f(350, 100);
 const sf::Vector2f Boss::m_START_POS = sf::Vector2f(75, -350);
 
 const sf::Vector2f Boss::m_TOWER_POS_1 = sf::Vector2f(177, -250);
-const sf::Vector2f Boss::m_TOWER_POS_2 = sf::Vector2f(290, -150);
+const sf::Vector2f Boss::m_TOWER_POS_2 = sf::Vector2f(287, -175);
 const sf::Vector2f Boss::m_TOWER_POS_3 = sf::Vector2f(402, -250);
 
 const sf::IntRect Boss::m_TOWER_COLL_BOX_1 = sf::IntRect(77, -520, 200, 200);
 const sf::IntRect Boss::m_TOWER_COLL_BOX_2 = sf::IntRect(250, -370, 100, 200);
 const sf::IntRect Boss::m_TOWER_COLL_BOX_3 = sf::IntRect(322, -520, 200, 200);
 
-const sf::IntRect Boss::m_TOWER_TEX_RECT = sf::IntRect(68, 134, 20, 20);
+const sf::IntRect Boss::m_TOWER_TEX_RECT = sf::IntRect(98, 126, 28, 28);
 
 const sf::IntRect Boss::m_BOSS_SIZE = sf::IntRect(50, 50, 400, 100);
 
