@@ -46,5 +46,5 @@ private:
 	float m_slowWaveTimer = 0;
 	float m_waveWaveTimer = 0;
 	const int m_NUM_WAVES_BETWEEN_BOSS = 3;
-	int m_waveCounter = 50;
+	int m_waveCounter = 0;
 };

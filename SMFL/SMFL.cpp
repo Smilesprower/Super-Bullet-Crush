@@ -58,8 +58,8 @@ sf::Clock myClock;
 sf::Time deltaTime;
 Player player;
 Level level; 
-sf::Texture m_tex, m_bgTex, mainTex, highScoreTex, controllerDisconnectedTex, controlsTex, gameOverTex;
-sf::Sprite m_titleSpr, highscoreSpr, disconnectedSpr, controlsSpr, gameOverSpr;
+sf::Texture m_tex, m_bgTex, mainTex, highScoreTex, controllerDisconnectedTex, controlsTex, gameOverTex, levelCompTex;
+sf::Sprite m_titleSpr, highscoreSpr, disconnectedSpr, controlsSpr, gameOverSpr, levelCompSpr;
 std::vector<sf::Texture> m_backGroundTex;
 sf::Vector2f screenDimensions = sf::Vector2f(600, 800);
 int fps = 0;
@@ -131,6 +131,10 @@ void LoadContent()
 	gameOverTex.loadFromFile("../resources/gameover.png");
 	gameOverSpr.setTexture(gameOverTex);
 	gameOverSpr.setTextureRect(sf::IntRect(0, 0, 600, 800));
+
+	levelCompTex.loadFromFile("../resources/level.png");
+	levelCompSpr.setTexture(levelCompTex);
+	levelCompSpr.setTextureRect(sf::IntRect(0, 0, 600, 800));
 
 	for (int i = 0; i < m_MAXLEVELS; i++)
 	{
@@ -213,6 +217,47 @@ void(UpdateGame())
 }
 void(UpdateLevelComplete())
 {
+	if (PlControls::Instance().m_leftAnalogStick.y > 60 && PlControls::Instance().m_leftAnalogStickPrev.y < 60)
+	{
+		if (cursorNum < OPTIONS)
+		{
+			cursorNum++;
+			cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y + cursorOffset));
+			SoundManager::Instance().PlaySFX(SoundManager::SoundsList::CURSOR_SFX);
+		}
+	}
+
+	else if (PlControls::Instance().m_leftAnalogStick.y < -60 && PlControls::Instance().m_leftAnalogStickPrev.y > -60)
+	{
+		if (cursorNum > GAME)
+		{
+			cursorNum--;
+			cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y - cursorOffset));
+			SoundManager::Instance().PlaySFX(SoundManager::SoundsList::CURSOR_SFX);
+		}
+	}
+
+	if (PlControls::Instance().m_buttons.at(0) && PlControls::Instance().m_buttons.at(0) != PlControls::Instance().m_buttonsPrev.at(0))
+	{
+		if (cursorNum == GAME)
+		{
+			gameMode = GAME;
+			ResetGame();
+			SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_1, 0);
+		}
+		else if (cursorNum == OPTIONS)
+		{
+			Score::Instance().GetAndSortHighScores();
+			Score::Instance().SaveScoresToFile();
+			cursorNum = 1;
+			gameMode = MAINMENU;
+			cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y + cursorOffset * -2));
+			SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::TITLE_SFX, 7);
+			ResetGame();
+		}
+	}
+
+
 }
 void(UpdateGameOver())
 {
@@ -303,6 +348,7 @@ void(DrawGame(sf::RenderWindow &p_window, sf::View &p_view))
 		p_view.reset(sf::FloatRect(0, 0, 600, 800));
 		p_window.setView(p_view);
 		gameMode = LEVELCOMPLETE;
+		cursor.setPosition(sf::Vector2f(cursor.getPosition().x, 536 + cursorOffset));
 	}
 
 	if (!shakeScreen)
@@ -325,6 +371,8 @@ void(DrawGameOver(sf::RenderWindow &p_window))
 }
 void(DrawLevelComplete(sf::RenderWindow &p_window))
 {
+	p_window.draw(levelCompSpr);
+	p_window.draw(cursor);
 }
 void(DrawOptions(sf::RenderWindow &p_window))
 {
