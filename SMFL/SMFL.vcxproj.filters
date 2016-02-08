@@ -114,9 +114,6 @@
     <ClInclude Include="PauseSoundButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WaveEnem.h">
-      <Filter>Header Files\Enemy</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -202,9 +199,6 @@
     </ClCompile>
     <ClCompile Include="PauseSoundButton.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WaveEnem.cpp">
-      <Filter>Source Files\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

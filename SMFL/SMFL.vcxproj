@@ -114,7 +114,6 @@
     <ClInclude Include="ThreeDeeSoundButton.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="UI.h" />
-    <ClInclude Include="WaveEnem.h" />
     <ClInclude Include="WeakSpot.h" />
   </ItemGroup>
   <ItemGroup>
@@ -148,7 +147,6 @@
     <ClCompile Include="ThreeDeeSoundButton.cpp" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="UI.cpp" />
-    <ClCompile Include="WaveEnem.cpp" />
     <ClCompile Include="WeakSpot.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

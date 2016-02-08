@@ -83,11 +83,6 @@ void ResetGame()
 
 	BulletManager::Instance().Reset();
 	EnemyManager::Instance().Reset();
-
-
-	//BEN FIX THIS SHIT
-	//BulletManager::Instance().Init(*&m_tex);
-	//EnemyManager::Instance().Init(*&m_tex);
 }
 //////////////////
 void Init()

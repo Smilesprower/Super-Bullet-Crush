@@ -7,16 +7,12 @@
 #include <iostream>
 #include <ctime>
 #include "SFML\Graphics\RectangleShape.hpp"
-#include "WaveEnem.h"
 
 bool hasHomingSpawned = false;
 
 const sf::IntRect EnemyManager::m_HOMING_ENEM_COORDS = sf::IntRect(0, 301, 58, 50);
 const sf::IntRect EnemyManager::m_SLOW_SHOOTY_ENEM_COORDS = sf::IntRect(0, 301, 58, 50);
 const sf::IntRect EnemyManager::m_BOSS_COORDS = sf::IntRect(102, 299, 450, 200);
-
-int counter = 0;
-bool isGoingRight = (counter % 2);
 
 EnemyManager::EnemyManager()
 {
@@ -44,7 +40,7 @@ void EnemyManager::Init(sf::Texture& p_tex)
 
 void EnemyManager::Update(sf::Vector2f p_playerPos, float p_dt, sf::Vector2f p_screenDimensions)
 {
-	isGoingRight = (counter % 2);
+
 
 	ManageEnemySpawning(p_screenDimensions, p_playerPos, p_dt);
 
@@ -115,13 +111,6 @@ void EnemyManager::AddHomingEnem(sf::Vector2f p_position)
 	m_enemyList.at(m_enemyList.size() - 1)->Init();
 }
 
-
-void EnemyManager::AddWaveyEnem(sf::Vector2f p_position)
-{
-	m_enemyList.push_back(new WaveEnem(p_position, m_textureAtlas, m_HOMING_ENEM_COORDS, isGoingRight));
-	m_enemyList.at(m_enemyList.size() - 1)->Init();
-}
-
 std::vector<Enemy*> * EnemyManager::GetEnemyList()
 {
 	return &m_enemyList;
@@ -135,9 +124,10 @@ void EnemyManager::AddSlowShootyEnem(sf::Vector2f p_position)
 
 void EnemyManager::AddHomingWave(sf::Vector2f p_screenDimensions)
 {
-	if (m_homingWaveTimer > m_TIME_BETWEEN_HOMING_WAVES)
+	if (m_waveTimer > m_TIME_BETWEEN_HOMING_WAVES)
 	{
-		m_homingWaveTimer = 0;
+		m_waveTimer = 0;
+		hasHomingSpawned = false;
 		m_waveCounter--;
 		for (int i = 0; i < 5; i++)
 		{
@@ -151,10 +141,9 @@ void EnemyManager::AddHomingWave(sf::Vector2f p_screenDimensions)
 
 void EnemyManager::AddSlowWave(sf::Vector2f p_screenDimensions)
 {
-	if (m_slowWaveTimer > m_TIME_BETWEEN_SLOW_WAVES)
+	if (m_waveTimer > m_TIME_BETWEEN_SLOW_WAVES && !hasHomingSpawned)
 	{
-		m_slowWaveTimer = 0;
-		m_waveCounter--;
+		hasHomingSpawned = true;
 		for (int i = 0; i < 5; i++)
 		{
 			for (int j = 0; j < 1; j++)
@@ -166,36 +155,14 @@ void EnemyManager::AddSlowWave(sf::Vector2f p_screenDimensions)
 	}
 }
 
-void EnemyManager::AddWaveyWave(sf::Vector2f p_screenDimensions)
-{
-	if (m_waveWaveTimer > m_TIME_BETWEEN_WAVE_WAVES)
-	{
-		counter++;
-		m_waveWaveTimer = 0;
-		m_waveCounter--;
-		for (int i = 0; i < 1; i++)
-		{
-			for (int j = 0; j < 1; j++)
-			{
-				int xPos = 500;
-				AddWaveyEnem(sf::Vector2f(sf::Vector2f(xPos, -100 - (j * 50))));
-			}
-		}
-	}
-}
-
-
 void EnemyManager::ManageEnemySpawning(sf::Vector2f p_screenDimensions, sf::Vector2f p_playerPos, float p_dt)
 {
-	m_homingWaveTimer += p_dt / 10000;
-	m_slowWaveTimer += p_dt / 10000;
-	m_waveWaveTimer += p_dt / 10000;
+	m_waveTimer += p_dt / 10000;
 
 	if (m_waveCounter != 0)
 	{
-		AddWaveyWave(p_screenDimensions);
-		AddSlowWave(p_screenDimensions);
 		AddHomingWave(p_screenDimensions);
+		AddSlowWave(p_screenDimensions);
 	}
 }
 
@@ -212,6 +179,5 @@ bool EnemyManager::ShouldCheckBoss()
 void EnemyManager::Reset()
 {
 	m_enemyList.clear();
-	m_waveCounter = m_MAX_WAVES;
 	m_boss = Boss(m_textureAtlas, m_BOSS_COORDS);
 }

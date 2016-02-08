@@ -34,10 +34,10 @@ public:
 	int AddBulletGroup(BulletGroup & p_group);
 
 	void RemoveBulletGroup(BulletGroup *  p_group);
-	void Reset();
+
 	static BulletManager& Instance();
 
-
+	void Reset();
 
 
 private:
@@ -51,3 +51,4 @@ private:
 	sf::IntRect m_MISSILE_TEX_COORDS;
 	sf::IntRect m_DEFAULT_TEX_COORDS;
 };
+

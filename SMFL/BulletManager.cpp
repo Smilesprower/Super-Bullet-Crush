@@ -42,8 +42,6 @@ void BulletManager::Update(sf::Time p_deltaTime, sf::Vector2f p_screenDimensions
 
 
 	m_playerBullets.Update(p_deltaTime, p_screenDimensions);
-	//if (m_playerBullets.HasDestroyedAMissile() != sf::Vector2f(-1, -1))
-	//AddExplosion(m_playerBullets.HasDestroyedAMissile(), 24);
 }
 
 void BulletManager::Draw(sf::RenderWindow& p_window)
@@ -127,3 +125,4 @@ void BulletManager::Reset()
 	m_bulletGroups.clear();
 	m_playerBullets = StraightBulletGroup();
 }
+
