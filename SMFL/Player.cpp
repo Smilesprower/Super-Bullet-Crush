@@ -261,18 +261,13 @@ void Player::UpdateAlive(float p_dt)
 		bool isinBottom = m_position.y + m_velocity.y < m_BOTTOMBORDER;
 
 
-		if (isinBottom && isinTop)
+		if (isinBottom && isInLeft && isInRight && isinTop)
 		{
 
-			m_position.y += m_velocity.y;
+			m_position += m_velocity;
 
 			m_playerSprite.setPosition(m_position);
 			m_origin = sf::Vector2f(m_position.x + m_WIDTH * 0.5f, m_position.y + m_HEIGHT * 0.5f);
-
-		}
-
-		if (isInLeft && isInRight)
-		{
 
 			for (int towerNo = 0; towerNo < m_MAXTOWERS; towerNo++)
 			{

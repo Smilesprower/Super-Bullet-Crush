@@ -208,3 +208,9 @@ bool EnemyManager::ShouldCheckBoss()
 {
 	return (m_waveCounter == 0);
 }
+
+void EnemyManager::Reset()
+{
+	m_enemyList.clear();
+	m_boss = Boss(m_textureAtlas, m_BOSS_COORDS);
+}
