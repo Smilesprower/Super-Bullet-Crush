@@ -9,8 +9,6 @@ const char * SoundManager::EXPLOSION = "../resources/exp.wav";
 const char * SoundManager::CONFIRM = "../resources/confirm.wav";
 const char * SoundManager::SHOOT = "../resources/shoot.wav";
 const char * SoundManager::PLAYEREXPLOSION = "../resources/pExp.wav";
-const char * SoundManager::COMPLETE = "../resources/complete.mp3";
-const char * SoundManager::TITLE = "../resources/title.mp3";
 
 SoundManager::SoundManager()
 {
@@ -33,22 +31,34 @@ void SoundManager::PlaySoundEffect3D(sf::Vector2f p_pos)
 	channel20->set3DDopplerLevel(0);
 
 }
-void SoundManager::PlaySoundBG(SoundManager::SoundsList p_effect, int p_trackNum)
+void SoundManager::PlaySoundBG(SoundManager::SoundsList p_effect)
 {
-	sourcePos = { 300, 0.0f, 400 };
-	float volume = 1.0f;
-	FMODsys->playSound(FMOD_CHANNEL_REUSE, sounds.at(p_trackNum), false, &channel);
-	channel->setVolume(volume);
-	channel->set3DMinMaxDistance(10000, 10000);
+	if (p_effect == SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_1)
+	{
+		sourcePos = { 300, 0.0f, 400 };
+		float volume = 1.0f;
+		FMODsys->playSound(FMOD_CHANNEL_REUSE, sounds.at(0), false, &channel);
+		channel->setVolume(volume);
+		channel->set3DMinMaxDistance(10000, 10000);
 
-	FMODsys->createReverb(&reverb);
-	FMOD_REVERB_PROPERTIES prop = FMOD_PRESET_SEWERPIPE;
-	reverb->setProperties(&prop);
-	FMOD_VECTOR pos = { 300, 0.0f, 400 };
-	float mindist = 150;
-	float maxdist = 150;
-	reverb->set3DAttributes(&pos, mindist, maxdist);
-	reverb->setActive(false);
+		FMODsys->createReverb(&reverb);
+		FMOD_REVERB_PROPERTIES prop = FMOD_PRESET_SEWERPIPE;
+		reverb->setProperties(&prop);
+		FMOD_VECTOR pos = { 300, 0.0f, 400 };
+		float mindist = 150;
+		float maxdist = 150;
+		reverb->set3DAttributes(&pos, mindist, maxdist);
+		reverb->setActive(false);
+
+	}
+}
+
+void SoundManager::StopSound(bool p_paused)
+{
+	if (p_paused)
+		channel->stop();
+	else
+		this->PlaySoundBG(BACKGROUND_MUSIC_LEVEL_1);
 }
 
 void SoundManager::UpdateSound(sf::Vector2f p_pos, sf::Vector2f p_vel)
@@ -84,19 +94,13 @@ void SoundManager::Init()
 	FMODsys->createSound(CURSOR, FMOD_DEFAULT, 0, &sound);
 	sounds.push_back(sound);
 
-	FMODsys->createSound(CONFIRM, FMOD_DEFAULT,0, &sound);
+	FMODsys->createSound(CONFIRM, FMOD_DEFAULT, 0, &sound);
 	sounds.push_back(sound);
 
 	FMODsys->createSound(SHOOT, FMOD_DEFAULT, 0, &sound);
 	sounds.push_back(sound);
 
 	FMODsys->createSound(PLAYEREXPLOSION, FMOD_DEFAULT, 0, &sound);
-	sounds.push_back(sound);
-
-	FMODsys->createSound(COMPLETE, FMOD_DEFAULT, 0, &sound);
-	sounds.push_back(sound);
-
-	FMODsys->createStream(TITLE, FMOD_LOOP_NORMAL | FMOD_3D, 0, &sound);
 	sounds.push_back(sound);
 }
 
@@ -117,8 +121,6 @@ void SoundManager::PlaySFX(SoundsList p_effect)
 		FMODsys->playSound(FMOD_CHANNEL_FREE, sounds.at(4), false, NULL);
 	if (p_effect == SoundManager::SoundsList::PLAYEREXPLOSION_SFX)
 		FMODsys->playSound(FMOD_CHANNEL_FREE, sounds.at(5), false, NULL);
-	if (p_effect == SoundManager::SoundsList::COMPLETE_SFX)
-		FMODsys->playSound(FMOD_CHANNEL_FREE, sounds.at(6), false, NULL);
 }
 
 void SoundManager::StopAllSounds()

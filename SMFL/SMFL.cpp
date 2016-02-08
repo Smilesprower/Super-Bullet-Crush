@@ -58,8 +58,8 @@ sf::Clock myClock;
 sf::Time deltaTime;
 Player player;
 Level level;
-sf::Texture m_tex, m_bgTex, mainTex, highScoreTex, controllerDisconnectedTex, controlsTex, gameOverTex;
-sf::Sprite m_titleSpr, highscoreSpr, disconnectedSpr, controlsSpr, gameOverSpr;
+sf::Texture m_tex, m_bgTex, mainTex, highScoreTex, controllerDisconnectedTex, controlsTex;
+sf::Sprite m_titleSpr, highscoreSpr, disconnectedSpr, controlsSpr;
 std::vector<sf::Texture> m_backGroundTex;
 sf::Vector2f screenDimensions = sf::Vector2f(600, 800);
 int fps = 0;
@@ -72,18 +72,6 @@ PauseSoundButton pauseSoundButton = PauseSoundButton(sf::IntRect(5, 780, 200, 20
 
 //////////////////
 const byte m_MAXLEVELS = 1;
-
-
-void ResetGame()
-{
-	updateScores = true;
-	shakeScreen = false;
-	player = Player(*&m_tex, sf::Vector2f(280, 600));
-	level = Level(*&m_backGroundTex, screenDimensions);
-
-	BulletManager::Instance().Reset();
-	EnemyManager::Instance().Reset();
-}
 //////////////////
 void Init()
 {
@@ -104,7 +92,7 @@ void Init()
 		highscores.at(i).setCharacterSize(30);
 	}
 
-	SoundManager::Instance().PlaySoundBG(SoundManager::TITLE_SFX, 7);
+
 }
 void LoadContent()
 {
@@ -128,10 +116,6 @@ void LoadContent()
 	controlsTex.loadFromFile("../resources/controls.png");
 	controlsSpr.setTexture(controlsTex);
 	controlsSpr.setTextureRect(sf::IntRect(0, 0, 600, 800));
-
-	gameOverTex.loadFromFile("../resources/gameover.png");
-	gameOverSpr.setTexture(gameOverTex);
-	gameOverSpr.setTextureRect(sf::IntRect(0, 0, 600, 800));
 
 
 	for (int i = 0; i < m_MAXLEVELS; i++)
@@ -174,7 +158,7 @@ void(UpdateMainMenu())
 		if (cursorNum == GAME)
 		{
 			gameMode = GAME;
-			SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_1, 0);
+			//SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_1);
 		}
 		else if (cursorNum == OPTIONS)
 		{
@@ -204,13 +188,6 @@ void(UpdateGame())
 	livesTxt.setString("x" + std::to_string(player.GetLivesNum()));
 	cScoreTxt.setString(Score::Instance().getCurrentScore());
 	hScoreTxt.setString(Score::Instance().getHighestScore());
-	if (player.GetLivesNum() == 0)
-	{
-		gameMode = GAMEOVER;
-		cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y + cursorOffset * 2));
-		SoundManager::Instance().StopAllSounds();
-		SoundManager::Instance().PlaySFX(SoundManager::COMPLETE_SFX);
-	}
 
 }
 void(UpdateLevelComplete())
@@ -218,16 +195,6 @@ void(UpdateLevelComplete())
 }
 void(UpdateGameOver())
 {
-	if (PlControls::Instance().m_buttons.at(0) && PlControls::Instance().m_buttons.at(0) != PlControls::Instance().m_buttonsPrev.at(0))
-	{
-		Score::Instance().GetAndSortHighScores();
-		Score::Instance().SaveScoresToFile();
-		ResetGame();
-		cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y - cursorOffset *2));
-		gameMode = MAINMENU;
-		SoundManager::Instance().StopAllSounds();
-		SoundManager::Instance().PlaySoundBG(SoundManager::TITLE_SFX, 7); 
-	}
 }
 void(UpdateOptions())
 {
@@ -250,8 +217,12 @@ void(UpdateScore())
 			highscores.at(i).setString(temp.at(i));
 		updateScores = false;
 	}
+
 	if (PlControls::Instance().m_buttons.at(0) && PlControls::Instance().m_buttons.at(0) != PlControls::Instance().m_buttonsPrev.at(0))
+	{
+		Score::Instance().SaveScoresToFile();
 		gameMode = MAINMENU;
+	}
 }
 // DRAW GAME MODES
 //////////////////
@@ -296,7 +267,6 @@ void(DrawGame(sf::RenderWindow &p_window, sf::View &p_view))
 	if (level.getEndLevelImage().getFillColor().a > 250)
 	{
 		SoundManager::Instance().StopAllSounds();
-		SoundManager::Instance().PlaySFX(SoundManager::COMPLETE_SFX);
 		shakeScreen = false;
 		p_view.reset(sf::FloatRect(0, 0, 600, 800));
 		p_window.setView(p_view);
@@ -318,11 +288,12 @@ void(DrawGame(sf::RenderWindow &p_window, sf::View &p_view))
 }
 void(DrawGameOver(sf::RenderWindow &p_window))
 {
-	p_window.draw(gameOverSpr);
-	p_window.draw(cursor);
+
 }
 void(DrawLevelComplete(sf::RenderWindow &p_window))
 {
+	p_window.draw(controlsSpr);
+	p_window.draw(cursor);
 }
 void(DrawOptions(sf::RenderWindow &p_window))
 {
@@ -519,6 +490,7 @@ int main()
 	} 
 	return EXIT_SUCCESS;
 }
+
 
 
 // Joystick Buttons

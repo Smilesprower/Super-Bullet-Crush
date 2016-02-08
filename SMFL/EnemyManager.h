@@ -17,7 +17,6 @@ public:
 	Boss * GetBoss();
 	bool ShouldCheckBoss();
 	void Reset();
-
 private:
 	std::vector<Enemy*> m_enemyList;
 	Boss m_boss;
@@ -31,14 +30,20 @@ private:
 
 	void AddHomingEnem(sf::Vector2f p_position);
 	void AddSlowShootyEnem(sf::Vector2f p_position);
+	void AddWaveyEnem(sf::Vector2f p_position);
 
 	void AddHomingWave(sf::Vector2f p_screenDimensions);
+	void AddWaveyWave(sf::Vector2f p_screenDimensions);
 	void AddSlowWave(sf::Vector2f p_screenDimensions);
 
 	//Enemy timer shit
-	const float m_TIME_BETWEEN_HOMING_WAVES = 250;
-	const float m_TIME_BETWEEN_SLOW_WAVES = 150;
-	float m_waveTimer = 0;
+	const float m_TIME_BETWEEN_HOMING_WAVES = 200;
+	const float m_TIME_BETWEEN_SLOW_WAVES = 700;
+	const float m_TIME_BETWEEN_WAVE_WAVES = 60;
+
+	float m_homingWaveTimer = 0;
+	float m_slowWaveTimer = 0;
+	float m_waveWaveTimer = 0;
 	const int m_NUM_WAVES_BETWEEN_BOSS = 3;
-	int m_waveCounter = 5;
+	int m_waveCounter = 500;
 };

@@ -39,7 +39,7 @@ void PauseSoundButton::Update(sf::Vector2i p_mousePos)
 void PauseSoundButton::ClickedFunc()
 {
 	m_isSoundEnabled = !m_isSoundEnabled;
-	//SoundManager::Instance().StopSound(m_isSoundEnabled);
+	SoundManager::Instance().StopSound(m_isSoundEnabled);
 }
 
 void PauseSoundButton::Draw(sf::RenderWindow &p_window)

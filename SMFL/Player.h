@@ -100,6 +100,7 @@ private:
 	sf::IntRect m_animBox;
 	static const int m_EXPSIZEX;
 	static const int m_EXPSIZEY;
+	static const int m_LEFTBORDER, m_RIGHTBORDER, m_TOPBORDER, m_BOTTOMBORDER;
 	static const int m_TEXOFFSETY;
 	static const int m_TEXOFFSETX;
 	static const float m_COLLISIONBOXWIDTH;

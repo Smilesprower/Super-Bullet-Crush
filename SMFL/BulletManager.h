@@ -34,10 +34,10 @@ public:
 	int AddBulletGroup(BulletGroup & p_group);
 
 	void RemoveBulletGroup(BulletGroup *  p_group);
-
+	void Reset();
 	static BulletManager& Instance();
 
-	void Reset();
+
 
 
 private:
