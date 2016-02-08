@@ -8,7 +8,7 @@ public:
 	Level();
 	~Level();
 	Level(std::vector<sf::Texture>& p_levelTextures, sf::Vector2f p_screenDimensions);
-	void Update(float p_deltaTime);
+	void Update(float p_deltaTime, bool);
 	void ChangeLevel(int p_level);
 	sf::Sprite getSprite();
 

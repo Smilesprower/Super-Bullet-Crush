@@ -32,7 +32,7 @@ BossTower::BossTower(sf::Vector2f p_position, sf::Texture * p_tex, sf::IntRect p
 	m_bulletGroup = new StraightBulletGroup();
 	BulletManager::Instance().AddBulletGroup(*m_bulletGroup);
 	m_shotTimer = 0;
-	m_health = 50;
+	m_health = 500;
 }
 
 

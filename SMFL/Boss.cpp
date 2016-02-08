@@ -185,3 +185,13 @@ bool Boss::CheckIfDefeated()
 
 	return isDefeated;
 }
+
+bool Boss::CheckIfBossHasStopped()
+{
+	return (m_position.y >= m_END_POS.y);
+}
+
+bool Boss::CheckIfExploding()
+{
+	return (m_state == PLAYING_ANIM);
+}

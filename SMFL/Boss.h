@@ -47,6 +47,8 @@ public:
 	std::vector<sf::Sprite> GetTextureList();
 	std::vector<BossTower> * GetTowerList();
 	bool CheckIfDefeated();
+	bool CheckIfBossHasStopped();
+	bool CheckIfExploding();
 
 private:
 	std::vector<BossTower> m_towerList;

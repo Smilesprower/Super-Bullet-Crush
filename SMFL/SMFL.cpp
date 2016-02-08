@@ -52,6 +52,7 @@ byte cursorNum = 1;
 byte cursorOffset = 62;
 byte numOfHighScores = 10;
 bool updateScores = true;
+bool shakeScreen = false;
 
 sf::Clock myClock;
 sf::Time deltaTime;
@@ -87,7 +88,7 @@ void Init()
 	for (int i = 0; i < numOfHighScores; i++)
 	{
 		highscores.at(i).setFont(font);
-		highscores.at(i).setPosition(sf::Vector2f(220, 220 + 40 * i));
+		highscores.at(i).setPosition(sf::Vector2f(260, 220 + 40 * i));
 		highscores.at(i).setCharacterSize(30);
 	}
 
@@ -175,7 +176,7 @@ void(UpdateMainMenu())
 }
 void(UpdateGame())
 {
-	level.Update(deltaTime.asSeconds());
+	level.Update(deltaTime.asSeconds(), EnemyManager::Instance().GetBoss()->CheckIfBossHasStopped());
 	player.Update(deltaTime.asMicroseconds());
 	BulletManager::Instance().Update(deltaTime, screenDimensions);
 	EnemyManager::Instance().Update(player.getPosition(), deltaTime.asMicroseconds(), screenDimensions);
@@ -187,6 +188,7 @@ void(UpdateGame())
 	livesTxt.setString("x" + std::to_string(player.GetLivesNum()));
 	cScoreTxt.setString(Score::Instance().getCurrentScore());
 	hScoreTxt.setString(Score::Instance().getHighestScore());
+
 }
 void(UpdateGameOver())
 {
@@ -213,8 +215,6 @@ void(UpdateScore())
 		updateScores = false;
 	}
 
-
-
 	if (PlControls::Instance().m_buttons.at(0) && PlControls::Instance().m_buttons.at(0) != PlControls::Instance().m_buttonsPrev.at(0))
 	{
 		Score::Instance().SaveScoresToFile();
@@ -228,7 +228,7 @@ void(DrawMainMenu(sf::RenderWindow &p_window))
 	p_window.draw(m_titleSpr);
 	p_window.draw(cursor);
 }
-void(DrawGame(sf::RenderWindow &p_window))
+void(DrawGame(sf::RenderWindow &p_window, sf::View &p_view))
 {
 		p_window.draw(level.getSprite());
 
@@ -256,6 +256,19 @@ void(DrawGame(sf::RenderWindow &p_window))
 	p_window.draw(cScoreTxt);
 	p_window.draw(hScoreTxt);
 	p_window.draw(livesTxt);
+
+	if (!shakeScreen)
+	{
+		if (EnemyManager::Instance().GetBoss()->CheckIfExploding())
+			shakeScreen = true;
+	}
+	else
+	{
+		p_view.reset(sf::FloatRect(rand() % 21 + (-10), rand() % 21 + (-10), 600, 800));
+		p_window.setView(p_view);
+	}
+
+
 }
 void(DrawGameOver(sf::RenderWindow &p_window))
 {
@@ -326,7 +339,7 @@ void Update()
 
 // DRAW EVENT
 /////////////////////////////
-void Draw(sf::RenderWindow &p_window)
+void Draw(sf::RenderWindow &p_window, sf::View &p_view)
 {
 	// Clear Window
 	p_window.clear();
@@ -340,7 +353,7 @@ void Draw(sf::RenderWindow &p_window)
 		DrawMainMenu(p_window);
 		break;
 	case GAME:
-		DrawGame(p_window);
+		DrawGame(p_window, p_view);
 		break;
 	case GAMEOVER:
 		DrawGameOver(p_window);
@@ -368,6 +381,10 @@ int main()
 
 	// Create the main window 
 	sf::RenderWindow window(sf::VideoMode(screenDimensions.x, screenDimensions.y, 32), "SFML First Program");
+	sf::View view;
+	view.reset(sf::FloatRect(0, 0, 600, 800));
+	window.setView(view);
+
 
 	//window.setFramerateLimit(60);
 	window.setVerticalSyncEnabled(true);
@@ -433,7 +450,7 @@ int main()
 				}
 
 				threeDeeButton.Update(mousePos);
-			}				
+			}		
 		}
 
 		// Update World, Events, Game
@@ -442,7 +459,7 @@ int main()
 
 		// Draw World, Events, Game
 		/////////////////////////////
-		Draw(window);
+		Draw(window, view);
 	} 
 	return EXIT_SUCCESS;
 }
