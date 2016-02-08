@@ -18,14 +18,16 @@ public:
 		CONFIRM_SFX,
 		EXPLOSTION_SFX,
 		SHOOT_SFX,
-		PLAYEREXPLOSION_SFX
+		PLAYEREXPLOSION_SFX,
+		COMPLETE_SFX,
+		TITLE_SFX
 	};
 
 	static SoundManager& Instance();
 
 
 	void PlaySoundEffect3D(sf::Vector2f p_pos);
-	void PlaySoundBG(SoundManager::SoundsList p_effect);
+	void PlaySoundBG(SoundManager::SoundsList p_effect, int p_trackNum);
 	void PlaySFX(SoundManager::SoundsList p_effect);
 
 	void PlaySoundBGTest();
@@ -50,6 +52,8 @@ private:
 	const static char* CONFIRM;
 	const static char* SHOOT;
 	const static char* PLAYEREXPLOSION;
+	const static char* COMPLETE;
+	const static char* TITLE;
 	float volume;
 	FMOD::System *FMODsys; //will point to the FMOD system
 	FMOD::System *FMODsys2;
