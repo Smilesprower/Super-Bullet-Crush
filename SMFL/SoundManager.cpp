@@ -122,3 +122,15 @@ void SoundManager::PlaySFX(SoundsList p_effect)
 	if (p_effect == SoundManager::SoundsList::PLAYEREXPLOSION_SFX)
 		FMODsys->playSound(FMOD_CHANNEL_FREE, sounds.at(5), false, NULL);
 }
+
+void SoundManager::StopAllSounds()
+{
+	for (int i = 0; i < 128; i++)
+	{
+		FMOD::Channel* pChannel = nullptr;
+		FMOD_RESULT res = FMODsys->getChannel(i, &pChannel);
+
+		if (res == FMOD_OK && pChannel)
+			pChannel->stop();
+	}
+}

@@ -31,6 +31,7 @@ public:
 	void PlaySoundBGTest();
 
 	void StopSound(bool p_paused);
+	void StopAllSounds();
 	void UpdateSound(sf::Vector2f p_pos, sf::Vector2f p_vel);
 	void Init();
 

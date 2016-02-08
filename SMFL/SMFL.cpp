@@ -40,7 +40,7 @@
 
 // Game Modes
 //////////////////
-const byte MAINMENU = 0, GAME = 1, OPTIONS = 2, SCORE = 3, GAMEOVER = 4, DISCONNECTED = 5;
+const byte MAINMENU = 0, GAME = 1, OPTIONS = 2, SCORE = 3, GAMEOVER = 4, LEVELCOMPLETE = 5, DISCONNECTED = 6;
 byte gameMode = MAINMENU;
 byte prevGameMode = gameMode;
 
@@ -176,7 +176,7 @@ void(UpdateMainMenu())
 }
 void(UpdateGame())
 {
-	level.Update(deltaTime.asSeconds(), EnemyManager::Instance().GetBoss()->CheckIfBossHasStopped());
+	level.Update(deltaTime.asSeconds(), EnemyManager::Instance().GetBoss()->CheckIfBossHasStopped(), EnemyManager::Instance().GetBoss()->CheckIfExploding());
 	player.Update(deltaTime.asMicroseconds());
 	BulletManager::Instance().Update(deltaTime, screenDimensions);
 	EnemyManager::Instance().Update(player.getPosition(), deltaTime.asMicroseconds(), screenDimensions);
@@ -189,6 +189,9 @@ void(UpdateGame())
 	cScoreTxt.setString(Score::Instance().getCurrentScore());
 	hScoreTxt.setString(Score::Instance().getHighestScore());
 
+}
+void(UpdateLevelComplete())
+{
 }
 void(UpdateGameOver())
 {
@@ -257,6 +260,19 @@ void(DrawGame(sf::RenderWindow &p_window, sf::View &p_view))
 	p_window.draw(hScoreTxt);
 	p_window.draw(livesTxt);
 
+
+	// Change to level complete scene
+	////////////////////
+	p_window.draw(level.getEndLevelImage());
+	if (level.getEndLevelImage().getFillColor().a > 250)
+	{
+		SoundManager::Instance().StopAllSounds();
+		shakeScreen = false;
+		p_view.reset(sf::FloatRect(0, 0, 600, 800));
+		p_window.setView(p_view);
+		gameMode = LEVELCOMPLETE;
+	}
+
 	if (!shakeScreen)
 	{
 		if (EnemyManager::Instance().GetBoss()->CheckIfExploding())
@@ -272,6 +288,12 @@ void(DrawGame(sf::RenderWindow &p_window, sf::View &p_view))
 }
 void(DrawGameOver(sf::RenderWindow &p_window))
 {
+
+}
+void(DrawLevelComplete(sf::RenderWindow &p_window))
+{
+	p_window.draw(controlsSpr);
+	p_window.draw(cursor);
 }
 void(DrawOptions(sf::RenderWindow &p_window))
 {
@@ -330,8 +352,10 @@ void Update()
 	case SCORE:
 		UpdateScore();
 		break;
+	case LEVELCOMPLETE:
+		UpdateLevelComplete();
+		break;
 	case DISCONNECTED:
-
 		break;
 	}
 	SoundManager::Instance().UpdateSound(player.getPosition(), player.getVelocity());
@@ -363,6 +387,9 @@ void Draw(sf::RenderWindow &p_window, sf::View &p_view)
 		break;
 	case SCORE:
 		DrawScore(p_window);
+		break;
+	case LEVELCOMPLETE:
+		DrawLevelComplete(p_window);
 		break;
 	case DISCONNECTED:
 		DrawDisconnected(p_window);
