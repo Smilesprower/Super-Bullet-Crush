@@ -19,6 +19,8 @@ const sf::IntRect EnemyManager::m_BOSS_COORDS = sf::IntRect(102, 299, 450, 200);
 int counter = 0;
 bool isGoingRight = (counter % 2);
 
+bool shouldStartSpawning = false;
+
 EnemyManager::EnemyManager()
 {
 	std::srand(std::time(0));
@@ -92,15 +94,6 @@ void EnemyManager::Draw(sf::RenderWindow& p_window)
 		p_window.draw(*m_enemyList.at(i)->GetTexture());
 	}
 
-
-	//for (int i = 0; i < m_boss.GetTowerList()->size(); i++)
-	//{
-	//	sf::RectangleShape rect;
-	//	rect = sf::RectangleShape(sf::Vector2f(m_boss.GetTowerList()->at(i).GetCollisionBox().width, m_boss.GetTowerList()->at(i).GetCollisionBox().height));
-	//	rect.setPosition(sf::Vector2f(m_boss.GetTowerList()->at(i).GetCollisionBox().left, m_boss.GetTowerList()->at(i).GetCollisionBox().top));
-	//	p_window.draw(rect);
-	//}
-
 	std::vector<sf::Sprite> bossSprites = m_boss.GetTextureList();
 	for (int i = 0; i < bossSprites.size(); i++)
 	{
@@ -144,7 +137,7 @@ void EnemyManager::AddHomingWave(sf::Vector2f p_screenDimensions)
 		{
 			for (int j = 0; j < 1; j++)
 			{
-				AddHomingEnem(sf::Vector2f(std::rand() % (int)p_screenDimensions.x, -100 - (j * 50)));
+				AddHomingEnem(sf::Vector2f(0 + (i * 100), -100 - (j * 50)));
 			}
 		}
 	}
@@ -188,9 +181,18 @@ void EnemyManager::AddWaveyWave(sf::Vector2f p_screenDimensions)
 
 void EnemyManager::ManageEnemySpawning(sf::Vector2f p_screenDimensions, sf::Vector2f p_playerPos, float p_dt)
 {
-	m_homingWaveTimer += p_dt / 10000;
-	m_slowWaveTimer	  += p_dt / 10000;
-	m_waveWaveTimer   += p_dt / 10000;
+	if (shouldStartSpawning)
+	{
+		m_homingWaveTimer += p_dt / 10000;
+		m_slowWaveTimer += p_dt / 10000;
+		m_waveWaveTimer += p_dt / 10000;
+	}
+	else
+	{
+		m_safteyCounter += p_dt;
+		if (m_safteyCounter > m_SAFETY_TIME)
+			shouldStartSpawning = true;
+	}
 
 	if (m_waveCounter != 0)
 	{
@@ -213,5 +215,14 @@ bool EnemyManager::ShouldCheckBoss()
 void EnemyManager::Reset()
 {
 	m_enemyList.clear();
+	m_waveCounter = m_MAX_WAVES;
+
+	m_waveWaveTimer = 0;
+	m_slowWaveTimer = 0;
+	m_homingWaveTimer = 0;
+
+	m_safteyCounter = 0;
+	shouldStartSpawning = false;
+
 	m_boss = Boss(m_textureAtlas, m_BOSS_COORDS);
 }
