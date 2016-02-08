@@ -29,6 +29,10 @@ const int Player::m_BLASTERRADIUS = 11;
 const int Player::m_SPREADRADIUS = 5;
 const int Player::m_LAZERRADIUS = 64;
 const int Player::m_MISSILERADIUS = 6;
+const int Player::m_TOPBORDER = 0;
+const int Player::m_LEFTBORDER = 20;
+const int Player::m_RIGHTBORDER = 520;
+const int Player::m_BOTTOMBORDER = 720;
 
 const int Player::m_MAX_LIVES = 5;
 
@@ -250,15 +254,28 @@ void Player::UpdateAlive(float p_dt)
 	if (PlControls::Instance().m_leftStickEnabled)
 	{
 		m_velocity = PlControls::Instance().GetLeftStickAxis() * m_SPEED * p_dt;
-		m_position += m_velocity;
-		m_playerSprite.setPosition(m_position);
-		m_origin = sf::Vector2f(m_position.x + m_WIDTH * 0.5f, m_position.y + m_HEIGHT * 0.5f);
+		
+		bool isInRight = m_position.x + m_velocity.x < m_RIGHTBORDER;
+		bool isInLeft = m_position.x + m_velocity.x > m_LEFTBORDER;
+		bool isinTop = m_position.y + m_velocity.y > m_TOPBORDER;
+		bool isinBottom = m_position.y + m_velocity.y < m_BOTTOMBORDER;
 
-		for (int towerNo = 0; towerNo < m_MAXTOWERS; towerNo++)
+
+		if (isinBottom && isInLeft && isInRight && isinTop)
 		{
-			if (m_towers.at(towerNo).getAlive())
-				m_towers.at(towerNo).Update(m_velocity);
+
+			m_position += m_velocity;
+
+			m_playerSprite.setPosition(m_position);
+			m_origin = sf::Vector2f(m_position.x + m_WIDTH * 0.5f, m_position.y + m_HEIGHT * 0.5f);
+
+			for (int towerNo = 0; towerNo < m_MAXTOWERS; towerNo++)
+			{
+				if (m_towers.at(towerNo).getAlive())
+					m_towers.at(towerNo).Update(m_velocity);
+			}
 		}
+
 	}
 	// Check state of joystick Analog B
 	// Cannot fire when Invulnerable

@@ -158,7 +158,7 @@ void(UpdateMainMenu())
 		if (cursorNum == GAME)
 		{
 			gameMode = GAME;
-			SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_1);
+			//SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_1);
 		}
 		else if (cursorNum == OPTIONS)
 		{

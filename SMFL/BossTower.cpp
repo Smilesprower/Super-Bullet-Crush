@@ -82,5 +82,5 @@ void BossTower::Shoot(sf::Vector2f p_playerPos)
 	// 
 
 
-	BulletManager::Instance().AddSpiral(m_position, 16, true);
+	BulletManager::Instance().AddSpiral(m_position, 10, true);
 }
