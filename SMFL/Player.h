@@ -100,11 +100,12 @@ private:
 	sf::IntRect m_animBox;
 	static const int m_EXPSIZEX;
 	static const int m_EXPSIZEY;
+	static const int m_LEFTBORDER, m_RIGHTBORDER, m_TOPBORDER, m_BOTTOMBORDER;
 	static const int m_TEXOFFSETY;
 	static const int m_TEXOFFSETX;
 	static const float m_COLLISIONBOXWIDTH;
 	static const float m_COLLISIONBOXHEIGHT;
-	static const float m_ANIMTIMER, m_SPREADDELAYTIMER, m_MISSILEDELAYTIMER, m_BLASTERDELAYTIMER ;
+	static const float m_ANIMTIMER, m_SPREADDELAYTIMER, m_MISSILEDELAYTIMER, m_BLASTERDELAYTIMER;
 	static const float m_SPEED, m_BULLETSPEED, m_MISSILE_BULLETSPEED;
 	static const int m_WIDTH, m_HEIGHT, m_MAXFRAMES, m_MAXTOWERS;
 	static const float m_DEGTORAD, m_SPREADANGLE;

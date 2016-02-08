@@ -43,7 +43,7 @@ void BulletManager::Update(sf::Time p_deltaTime, sf::Vector2f p_screenDimensions
 
 	m_playerBullets.Update(p_deltaTime, p_screenDimensions);
 	//if (m_playerBullets.HasDestroyedAMissile() != sf::Vector2f(-1, -1))
-		//AddExplosion(m_playerBullets.HasDestroyedAMissile(), 24);
+	//AddExplosion(m_playerBullets.HasDestroyedAMissile(), 24);
 }
 
 void BulletManager::Draw(sf::RenderWindow& p_window)
@@ -73,7 +73,6 @@ void BulletManager::AddSpiral(sf::Vector2f p_point, int p_numColumns, bool p_sho
 {
 	SpiralBulletPattern * temp = new SpiralBulletPattern(p_point, p_shouldGoClockwise, p_numColumns, 50, 0.1, m_pTextureAtlas, m_SPIRAL_TEX_COORDS);
 	m_bulletGroups.push_back(temp);
-	int j = 0;
 }
 
 void BulletManager::AddExplosion(sf::Vector2f p_point, int p_numColumns, sf::Vector2f p_direction)
@@ -123,3 +122,8 @@ void BulletManager::RemoveBulletGroup(BulletGroup * p_group)
 	}
 }
 
+void BulletManager::Reset()
+{
+	m_bulletGroups.clear();
+	m_playerBullets = StraightBulletGroup();
+}
