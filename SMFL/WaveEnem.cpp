@@ -3,7 +3,7 @@
 
 const float WaveEnem::m_ACCEL = 0.000001;
 const float WaveEnem::m_MAX_SPEED = 0.0005;
-const float WaveEnem::m_COLLISIONBOXSIZE = 50;
+const float WaveEnem::m_COLLISIONBOXSIZE = 56;
 
 
 

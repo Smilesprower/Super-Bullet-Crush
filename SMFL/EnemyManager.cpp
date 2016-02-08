@@ -11,8 +11,9 @@
 
 bool hasHomingSpawned = false;
 
-const sf::IntRect EnemyManager::m_HOMING_ENEM_COORDS = sf::IntRect(0, 301, 58, 50);
-const sf::IntRect EnemyManager::m_SLOW_SHOOTY_ENEM_COORDS = sf::IntRect(0, 301, 58, 50);
+const sf::IntRect EnemyManager::m_HOMING_ENEM_COORDS = sf::IntRect(0, 409, 56, 60);
+const sf::IntRect EnemyManager::m_SLOW_SHOOTY_ENEM_COORDS = sf::IntRect(0, 352, 64, 56);
+const sf::IntRect EnemyManager::m_WAVE_ENEM_COORS = sf::IntRect(0, 301, 58, 50);
 const sf::IntRect EnemyManager::m_BOSS_COORDS = sf::IntRect(102, 299, 450, 200);
 
 int counter = 0;
@@ -75,7 +76,7 @@ void EnemyManager::Update(sf::Vector2f p_playerPos, float p_dt, sf::Vector2f p_s
 			if (m_boss.GetTowerList()->at(i).UpdateAnim(p_dt) == false)
 				m_boss.GetTowerList()->erase(m_boss.GetTowerList()->begin() + i);
 		}
-		//m_boss.Update(p_playerPos, p_dt);
+		m_boss.Update(p_playerPos, p_dt);
 		if (m_boss.CheckIfDefeated())
 		{
 			m_waveCounter = 5;
@@ -118,7 +119,7 @@ void EnemyManager::AddHomingEnem(sf::Vector2f p_position)
 
 void EnemyManager::AddWaveyEnem(sf::Vector2f p_position)
 {
-	m_enemyList.push_back(new WaveEnem(p_position, m_textureAtlas, m_HOMING_ENEM_COORDS, isGoingRight));
+	m_enemyList.push_back(new WaveEnem(p_position, m_textureAtlas, m_WAVE_ENEM_COORS, isGoingRight));
 	m_enemyList.at(m_enemyList.size() - 1)->Init();
 }
 

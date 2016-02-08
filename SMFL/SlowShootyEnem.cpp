@@ -5,8 +5,8 @@
 
 const float SlowShootyEnem::m_ACCEL = 0.00001;
 const float SlowShootyEnem::m_MAX_SPEED = 0.0002;
-const float SlowShootyEnem::m_COLLISIONBOXSIZEWIDTH = 58;
-const float SlowShootyEnem::m_COLLISIONBOXSIZEHEIGHT = 50;
+const float SlowShootyEnem::m_COLLISIONBOXSIZEWIDTH = 64;
+const float SlowShootyEnem::m_COLLISIONBOXSIZEHEIGHT = 56;
 const float SlowShootyEnem::m_BULLET_SPEED = 4;
 const float SlowShootyEnem::m_TIME_BETWEEN_SHOTS = 1000000;
 

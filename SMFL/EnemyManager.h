@@ -24,6 +24,7 @@ private:
 
 	static const sf::IntRect m_HOMING_ENEM_COORDS;
 	static const sf::IntRect m_SLOW_SHOOTY_ENEM_COORDS;
+	static const sf::IntRect m_WAVE_ENEM_COORS;
 	static const sf::IntRect m_BOSS_COORDS;
 
 	void ManageEnemySpawning(sf::Vector2f p_screenDimensions, sf::Vector2f p_playerPos, float p_dt);
@@ -45,5 +46,5 @@ private:
 	float m_slowWaveTimer = 0;
 	float m_waveWaveTimer = 0;
 	const int m_NUM_WAVES_BETWEEN_BOSS = 3;
-	int m_waveCounter = 500;
+	int m_waveCounter = 50;
 };
