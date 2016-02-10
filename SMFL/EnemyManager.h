@@ -44,12 +44,11 @@ private:
 
 	const float m_MAX_WAVES = 50;
 
-	const float m_SAFETY_TIME = 18000000;
+	const float m_SAFETY_TIME = 9000000;
 	float m_safteyCounter = 0;
 
 	float m_homingWaveTimer = 0;
 	float m_slowWaveTimer = 0;
 	float m_waveWaveTimer = 0;
-	const int m_NUM_WAVES_BETWEEN_BOSS = 3;
 	int m_waveCounter = m_MAX_WAVES;
 };

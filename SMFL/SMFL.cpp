@@ -243,6 +243,7 @@ void(UpdateLevelComplete())
 		{
 			gameMode = GAME;
 			ResetGame();
+			cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y - cursorOffset));
 			SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_1, 0);
 		}
 		else if (cursorNum == OPTIONS)
