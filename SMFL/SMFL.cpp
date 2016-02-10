@@ -71,18 +71,26 @@ DopplerButton dopplerButton = DopplerButton(sf::IntRect(5, 720, 200, 20));
 PauseSoundButton pauseSoundButton = PauseSoundButton(sf::IntRect(5, 780, 200, 20));
 
 //////////////////
-const byte m_MAXLEVELS = 1;
+const byte m_MAXLEVELS = 2;
 //////////////////
 
 void ResetGame()
 {
 	updateScores = true;
 	shakeScreen = false;
-	player = Player(*&m_tex, sf::Vector2f(280, 600));
-	int tempCurrLevelNum = level.GetLevelCount();
-	tempCurrLevelNum++;
-	level = Level(*&m_backGroundTex, screenDimensions);
-	level.ChangeLevel(tempCurrLevelNum);
+	if (player.GetLivesNum() != 0)
+	{
+		int tempCurrLevelNum = level.GetLevelCount();
+		level = Level(*&m_backGroundTex, screenDimensions);
+		tempCurrLevelNum++;
+		level.ChangeLevel(tempCurrLevelNum);
+		int playerLives = player.GetLivesNum();
+		player = Player(*&m_tex, sf::Vector2f(280, 600));
+		player.Setlives(playerLives);
+
+	}
+	else
+		player = Player(*&m_tex, sf::Vector2f(280, 600));
 
 
 	BulletManager::Instance().Reset();
@@ -215,7 +223,7 @@ void(UpdateGame())
 		gameMode = GAMEOVER;
 		cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y + cursorOffset * 2));
 		SoundManager::Instance().StopAllSounds();
-		SoundManager::Instance().PlaySFX(SoundManager::COMPLETE_SFX);
+		SoundManager::Instance().PlaySFX(SoundManager::GAMEOVER_SFX);
 	}
 
 }
@@ -248,6 +256,7 @@ void(UpdateLevelComplete())
 			gameMode = GAME;
 			ResetGame();
 			cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y - cursorOffset));
+			SoundManager::Instance().StopAllSounds();
 			SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_1, 0);
 		}
 		else if (cursorNum == OPTIONS)
@@ -257,6 +266,7 @@ void(UpdateLevelComplete())
 			cursorNum = 1;
 			gameMode = MAINMENU;
 			cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y + cursorOffset * -2));
+			SoundManager::Instance().StopAllSounds();
 			SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::TITLE_SFX, 7);
 			ResetGame();
 		}

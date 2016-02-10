@@ -41,7 +41,7 @@ private:
 	const float m_TIME_BETWEEN_HOMING_WAVES = 200;
 	const float m_TIME_BETWEEN_HOMING_WAVES_LVL2 = 600;
 	const float m_TIME_BETWEEN_SLOW_WAVES = 700;
-	const float m_TIME_BETWEEN_SLOW_WAVES_LVL2 = 1200;
+	const float m_TIME_BETWEEN_SLOW_WAVES_LVL2 = 10000;
 	const float m_TIME_BETWEEN_WAVE_WAVES = 60;
 	const float m_TIME_BETWEEN_WAVE_WAVES_LVL2 = 10;
 

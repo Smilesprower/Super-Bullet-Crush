@@ -71,7 +71,7 @@ BulletManager &BulletManager::Instance()
 
 void BulletManager::AddSpiral(sf::Vector2f p_point, int p_numColumns, bool p_shouldGoClockwise)
 {
-	SpiralBulletPattern * temp = new SpiralBulletPattern(p_point, p_shouldGoClockwise, p_numColumns, 50, 0.1, m_pTextureAtlas, m_SPIRAL_TEX_COORDS);
+	SpiralBulletPattern * temp = new SpiralBulletPattern(p_point, p_shouldGoClockwise, p_numColumns, 50, 0.03, m_pTextureAtlas, m_SPIRAL_TEX_COORDS);
 	m_bulletGroups.push_back(temp);
 }
 

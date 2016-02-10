@@ -46,11 +46,13 @@ public:
 	bool CheckIfInvulnerable();
 	bool CheckIfHidden();
 	AliveState GetAliveState();
+	void Setlives(int);
 private:
 
 	void UpdateAlive(float p_dt);
 	void UpdateDead(float p_dt);
 	void UpdateAnim(float p_dt);
+
 
 
 	BulletManager::WeaponType m_weaponType;

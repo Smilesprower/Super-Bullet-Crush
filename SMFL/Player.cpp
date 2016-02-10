@@ -282,24 +282,21 @@ void Player::UpdateAlive(float p_dt)
 	/////////////////////////////////////////////
 	if (PlControls::Instance().m_rightStickEnabled)
 	{
-		if (!m_isInvulnerable)
+		if (m_delay < 0)
 		{
-			if (m_delay < 0)
+			SoundManager::Instance().PlaySFX(SoundManager::SHOOT_SFX);
+			for (int towerNo = 0; towerNo < m_MAXTOWERS; towerNo++)
 			{
-				SoundManager::Instance().PlaySFX(SoundManager::SHOOT_SFX);
-				for (int towerNo = 0; towerNo < m_MAXTOWERS; towerNo++)
-				{
-					if (m_towers.at(towerNo).getAlive())
-						Shoot(towerNo);
-				}
-
-				if (m_weaponType == BulletManager::MISSILE)
-					m_delay = m_MISSILEDELAYTIMER;
-				else if (m_weaponType == BulletManager::BLASTER)
-					m_delay = m_BLASTERDELAYTIMER;
-				else if (m_weaponType == BulletManager::SPREAD)
-					m_delay = m_SPREADDELAYTIMER;
+				if (m_towers.at(towerNo).getAlive())
+					Shoot(towerNo);
 			}
+
+			if (m_weaponType == BulletManager::MISSILE)
+				m_delay = m_MISSILEDELAYTIMER;
+			else if (m_weaponType == BulletManager::BLASTER)
+				m_delay = m_BLASTERDELAYTIMER;
+			else if (m_weaponType == BulletManager::SPREAD)
+				m_delay = m_SPREADDELAYTIMER;
 		}
 	}
 
@@ -377,4 +374,9 @@ bool Player::CheckIfHidden()
 Player::AliveState Player::GetAliveState()
 {
 	return m_aliveState;
+}
+
+void Player::Setlives(int p_lives)
+{
+	m_lives = p_lives;
 }

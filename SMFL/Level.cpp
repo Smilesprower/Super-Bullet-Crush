@@ -50,6 +50,10 @@ void Level::Update(float p_deltaTime, bool p_bossStopped, bool p_bossDead)
 void Level::ChangeLevel(int p_level)
 {
 	m_currentLevel = p_level;
+	p_level %= 2;
+	m_bgSprite.setScale(sf::Vector2f(2, 4));
+	m_bgSprite.setTexture(m_tex->at(p_level));
+	m_bgSprite.setPosition(sf::Vector2f(0, 0));
 }
 
 sf::Sprite Level::getSprite()

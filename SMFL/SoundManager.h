@@ -20,7 +20,8 @@ public:
 		SHOOT_SFX,
 		PLAYEREXPLOSION_SFX,
 		COMPLETE_SFX,
-		TITLE_SFX
+		TITLE_SFX,
+		GAMEOVER_SFX
 	};
 
 	static SoundManager& Instance();
@@ -54,6 +55,7 @@ private:
 	const static char* PLAYEREXPLOSION;
 	const static char* COMPLETE;
 	const static char* TITLE;
+	const static char* GAMEOVER;
 	float volume;
 	FMOD::System *FMODsys; //will point to the FMOD system
 	FMOD::System *FMODsys2;

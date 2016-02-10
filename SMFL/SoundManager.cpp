@@ -11,6 +11,7 @@ const char * SoundManager::SHOOT = "../resources/shoot.wav";
 const char * SoundManager::PLAYEREXPLOSION = "../resources/pExp.wav";
 const char * SoundManager::COMPLETE = "../resources/complete.mp3";
 const char * SoundManager::TITLE = "../resources/title.mp3";
+const char * SoundManager::GAMEOVER = "../resources/gameover.mp3";
 
 SoundManager::SoundManager()
 {
@@ -106,6 +107,9 @@ void SoundManager::Init()
 
 	FMODsys->createStream(TITLE, FMOD_LOOP_NORMAL | FMOD_3D, 0, &sound);
 	sounds.push_back(sound);
+
+	FMODsys->createSound(GAMEOVER, FMOD_DEFAULT, 0, &sound);
+	sounds.push_back(sound);
 }
 
 SoundManager& SoundManager::Instance()
@@ -127,6 +131,8 @@ void SoundManager::PlaySFX(SoundsList p_effect)
 		FMODsys->playSound(FMOD_CHANNEL_FREE, sounds.at(5), false, NULL);
 	if (p_effect == SoundManager::SoundsList::COMPLETE_SFX)
 		FMODsys->playSound(FMOD_CHANNEL_FREE, sounds.at(6), false, NULL);
+	if (p_effect == SoundManager::SoundsList::GAMEOVER_SFX)
+		FMODsys->playSound(FMOD_CHANNEL_FREE, sounds.at(8), false, NULL);
 }
 
 void SoundManager::StopAllSounds()
