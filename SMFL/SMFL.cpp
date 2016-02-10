@@ -86,7 +86,7 @@ void ResetGame()
 
 
 	BulletManager::Instance().Reset();
-	EnemyManager::Instance().Reset();
+	EnemyManager::Instance().Reset(level.GetLevelCount());
 }
 void Init()
 {

@@ -16,7 +16,7 @@ public:
 	std::vector<Enemy*> * GetEnemyList();
 	Boss * GetBoss();
 	bool ShouldCheckBoss();
-	void Reset();
+	void Reset(int p_levelNum);
 private:
 	std::vector<Enemy*> m_enemyList;
 	Boss m_boss;
@@ -46,6 +46,7 @@ private:
 	const float m_TIME_BETWEEN_WAVE_WAVES_LVL2 = 10;
 
 	const float m_MAX_WAVES = 100;
+	const float m_MAX_WAVES_LVL2 = 200;
 
 	const float m_SAFETY_TIME = 9000000;
 	float m_safteyCounter = 0;

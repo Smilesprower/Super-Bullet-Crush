@@ -177,7 +177,7 @@ void EnemyManager::AddWaveyWave(sf::Vector2f p_screenDimensions)
 
 void EnemyManager::ManageEnemySpawning(sf::Vector2f p_screenDimensions, sf::Vector2f p_playerPos, float p_dt, int p_levelNum)
 {
-	if (p_levelNum % 2 == 1)
+	if (p_levelNum % 2 == 0)
 	{
 		if (shouldStartSpawning)
 		{
@@ -245,10 +245,13 @@ bool EnemyManager::ShouldCheckBoss()
 	return (m_waveCounter == 0);
 }
 
-void EnemyManager::Reset()
+void EnemyManager::Reset(int p_levelNum)
 {
 	m_enemyList.clear();
-	m_waveCounter = m_MAX_WAVES;
+	if (p_levelNum % 2 == 0)
+		m_waveCounter = m_MAX_WAVES;
+	else
+		m_waveCounter = m_MAX_WAVES_LVL2;
 
 	m_waveWaveTimer = 0;
 	m_slowWaveTimer = 0;

@@ -121,7 +121,7 @@ void CollisionManager::PlBulletEnemy()
 			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(10);
 
 		else if (correspondingList.at(i).m_bull->GetType() == Bullet::SPREAD)
-			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(3);
+			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(2);
 
 		else if (correspondingList.at(i).m_bull->GetType() == Bullet::AFTER_MISS)
 			EnemyManager::Instance().GetEnemyList()->at(correspondingList.at(i).m_enemIndex)->ReduceHealth(1);
