@@ -13,7 +13,7 @@ public:
 	void ChangeLevel(int p_level);
 	sf::Sprite getSprite();
 	sf::RectangleShape getEndLevelImage();
-
+	int GetLevelCount();
 private:
 	// List of Sprites;
 	sf::Sprite m_bgSprite;

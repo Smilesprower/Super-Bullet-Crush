@@ -79,7 +79,11 @@ void ResetGame()
 	updateScores = true;
 	shakeScreen = false;
 	player = Player(*&m_tex, sf::Vector2f(280, 600));
+	int tempCurrLevelNum = level.GetLevelCount();
+	tempCurrLevelNum++;
 	level = Level(*&m_backGroundTex, screenDimensions);
+	level.ChangeLevel(tempCurrLevelNum);
+
 
 	BulletManager::Instance().Reset();
 	EnemyManager::Instance().Reset();
@@ -197,7 +201,7 @@ void(UpdateGame())
 	level.Update(deltaTime.asSeconds(), EnemyManager::Instance().GetBoss()->CheckIfBossHasStopped(), EnemyManager::Instance().GetBoss()->CheckIfExploding());
 	player.Update(deltaTime.asMicroseconds());
 	BulletManager::Instance().Update(deltaTime, screenDimensions);
-	EnemyManager::Instance().Update(player.getPosition(), deltaTime.asMicroseconds(), screenDimensions);
+	EnemyManager::Instance().Update(player.getPosition(), deltaTime.asMicroseconds(), screenDimensions, level.GetLevelCount());
 	CollisionManager::Instance().CheckCollisions(player.GetCollisionBox(), &player);
 	CollisionManager::Instance().EnemBulletPl(&player);
 	if (EnemyManager::Instance().ShouldCheckBoss())

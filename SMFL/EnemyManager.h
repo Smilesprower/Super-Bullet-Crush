@@ -11,7 +11,7 @@ public:
 	~EnemyManager();
 	static EnemyManager& Instance();
 	void Init(sf::Texture& p_tex);
-	void Update(sf::Vector2f p_playerPos, float p_dt, sf::Vector2f p_screenDimensions);
+	void Update(sf::Vector2f p_playerPos, float p_dt, sf::Vector2f p_screenDimensions, int p_levelNum);
 	void Draw(sf::RenderWindow& p_window);
 	std::vector<Enemy*> * GetEnemyList();
 	Boss * GetBoss();
@@ -27,7 +27,7 @@ private:
 	static const sf::IntRect m_WAVE_ENEM_COORS;
 	static const sf::IntRect m_BOSS_COORDS;
 
-	void ManageEnemySpawning(sf::Vector2f p_screenDimensions, sf::Vector2f p_playerPos, float p_dt);
+	void ManageEnemySpawning(sf::Vector2f p_screenDimensions, sf::Vector2f p_playerPos, float p_dt, int p_levelNum);
 
 	void AddHomingEnem(sf::Vector2f p_position);
 	void AddSlowShootyEnem(sf::Vector2f p_position);
@@ -39,10 +39,13 @@ private:
 
 	//Enemy timer shit
 	const float m_TIME_BETWEEN_HOMING_WAVES = 200;
+	const float m_TIME_BETWEEN_HOMING_WAVES_LVL2 = 600;
 	const float m_TIME_BETWEEN_SLOW_WAVES = 700;
+	const float m_TIME_BETWEEN_SLOW_WAVES_LVL2 = 1200;
 	const float m_TIME_BETWEEN_WAVE_WAVES = 60;
+	const float m_TIME_BETWEEN_WAVE_WAVES_LVL2 = 10;
 
-	const float m_MAX_WAVES = 50;
+	const float m_MAX_WAVES = 100;
 
 	const float m_SAFETY_TIME = 9000000;
 	float m_safteyCounter = 0;

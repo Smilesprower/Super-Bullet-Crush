@@ -49,7 +49,7 @@ void Level::Update(float p_deltaTime, bool p_bossStopped, bool p_bossDead)
 
 void Level::ChangeLevel(int p_level)
 {
-
+	m_currentLevel = p_level;
 }
 
 sf::Sprite Level::getSprite()
@@ -60,4 +60,9 @@ sf::Sprite Level::getSprite()
 sf::RectangleShape Level::getEndLevelImage()
 {
 	return m_endLevelSprite;
+}
+
+int Level::GetLevelCount()
+{
+	return m_currentLevel;
 }
