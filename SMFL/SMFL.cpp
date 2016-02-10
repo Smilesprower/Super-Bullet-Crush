@@ -270,6 +270,7 @@ void(UpdateGameOver())
 	{
 		Score::Instance().GetAndSortHighScores();
 		Score::Instance().SaveScoresToFile();
+		level.ChangeLevel(0);
 		ResetGame();
 		cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y - cursorOffset * 2));
 		gameMode = MAINMENU;

@@ -189,13 +189,13 @@ void CollisionManager::CheckBossCollisions(sf::IntRect p_playerPos)
 			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(10);
 
 		else if (correspondingList.at(i).m_bull->GetType() == Bullet::SPREAD)
-			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(3);
+			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(2);
 
 		else if (correspondingList.at(i).m_bull->GetType() == Bullet::AFTER_MISS)
 			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(1);
 
 		else if (correspondingList.at(i).m_bull->GetType() == Bullet::MISSILE)
-			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(30);
+			EnemyManager::Instance().GetBoss()->GetTowerList()->at(correspondingList.at(i).m_enemIndex).ReduceHealth(50);
 	}
 }
 
