@@ -49,6 +49,7 @@ byte prevGameMode = gameMode;
 std::vector<sf::Text> highscores(10);
 sf::RectangleShape cursor;
 byte cursorNum = 1;
+int timer = 0;
 byte cursorOffset = 62;
 byte numOfHighScores = 10;
 bool updateScores = true;
@@ -64,7 +65,7 @@ std::vector<sf::Texture> m_backGroundTex;
 sf::Vector2f screenDimensions = sf::Vector2f(600, 800);
 int fps = 0;
 sf::Font font;
-sf::Text text, cScoreTxt, hScoreTxt, livesTxt;
+sf::Text text, cScoreTxt, hScoreTxt, livesTxt, bonusTxt, oScoreTxt;
 ReverbButton reverbButton = ReverbButton(sf::IntRect(5, 690, 200, 20));
 ThreeDeeSoundButton threeDeeButton = ThreeDeeSoundButton(sf::IntRect(5, 750, 200, 20));
 DopplerButton dopplerButton = DopplerButton(sf::IntRect(5, 720, 200, 20));
@@ -78,10 +79,12 @@ void ResetGame()
 {
 	updateScores = true;
 	shakeScreen = false;
+
+
 	if (player.GetLivesNum() != 0)
 	{
-		level = Level(*&m_backGroundTex, screenDimensions);
 		tempCurrLevelNum++;
+		level = Level(*&m_backGroundTex, screenDimensions);
 		level.ChangeLevel(tempCurrLevelNum);
 		int playerLives = player.GetLivesNum();
 		player = Player(*&m_tex, sf::Vector2f(280, 600));
@@ -89,8 +92,10 @@ void ResetGame()
 
 	}
 	else
+	{
 		player = Player(*&m_tex, sf::Vector2f(280, 600));
-
+		tempCurrLevelNum == 0;
+	}
 
 	BulletManager::Instance().Reset();
 	EnemyManager::Instance().Reset(level.GetLevelCount());
@@ -115,7 +120,6 @@ void Init()
 		highscores.at(i).setCharacterSize(30);
 	}
 	SoundManager::Instance().PlaySoundBG(SoundManager::TITLE_SFX, 7);
-
 }
 void LoadContent()
 {
@@ -226,6 +230,16 @@ void(UpdateGame())
 		SoundManager::Instance().PlaySFX(SoundManager::GAMEOVER_SFX);
 	}
 
+	if (EnemyManager::Instance().GetBoss()->CheckIfExploding())
+	{
+		timer += deltaTime.asSeconds();
+		if (timer > 1)
+		{
+			timer = 0;
+			SoundManager::Instance().PlaySFX(SoundManager::PLAYEREXPLOSION_SFX);
+		}
+	}
+
 }
 void(UpdateLevelComplete())
 {
@@ -261,7 +275,10 @@ void(UpdateLevelComplete())
 				SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_1, 0);
 			else
 				SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_2, 9);
-			tempCurrLevelNum++;
+			cScoreTxt.setPosition(40, 30);
+			cScoreTxt.setCharacterSize(22);
+
+
 		}
 		else if (cursorNum == OPTIONS)
 		{
@@ -273,6 +290,8 @@ void(UpdateLevelComplete())
 			SoundManager::Instance().StopAllSounds();
 			SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::TITLE_SFX, 7);
 			ResetGame();
+			cScoreTxt.setPosition(40, 30);
+			cScoreTxt.setCharacterSize(22);
 		}
 	}
 
@@ -369,19 +388,39 @@ void(DrawGame(sf::RenderWindow &p_window, sf::View &p_view))
 		p_window.setView(p_view);
 		gameMode = LEVELCOMPLETE;
 		cursor.setPosition(sf::Vector2f(cursor.getPosition().x, 536 + cursorOffset));
-	}
+		if (player.GetLivesNum() == 5)
+		{
+			oScoreTxt.setString(cScoreTxt.getString());
+			bonusTxt.setString("000005000");
+			std::string tempx = oScoreTxt.getString();
+			int temp1 = std::stoi(tempx);
 
-	if (!shakeScreen)
-	{
-		if (EnemyManager::Instance().GetBoss()->CheckIfExploding())
-			shakeScreen = true;
-	}
-	else
-	{
-		p_view.reset(sf::FloatRect(rand() % 21 + (-10), rand() % 21 + (-10), 600, 800));
-		p_window.setView(p_view);
-	}
+			std::string tempy = bonusTxt.getString();
+			int temp2 = std::stoi(tempy);
+			int result = temp1 + temp2;
+			Score::Instance().currentScore += 5000;
+			cScoreTxt.setString(std::string(9 - std::to_string(result).size(), '0') + std::to_string(result));
+		}
+		else
+		{
+			oScoreTxt.setString(cScoreTxt.getString());
+			bonusTxt.setString("000000000");
+		}
+		cScoreTxt.setPosition(220, 460);
+		cScoreTxt.setCharacterSize(30);
 
+		if (!shakeScreen)
+		{
+			if (EnemyManager::Instance().GetBoss()->CheckIfExploding())
+				shakeScreen = true;
+		}
+		else
+		{
+			p_view.reset(sf::FloatRect(rand() % 21 + (-10), rand() % 21 + (-10), 600, 800));
+			p_window.setView(p_view);
+		}
+
+	}
 
 }
 void(DrawGameOver(sf::RenderWindow &p_window))
@@ -391,7 +430,11 @@ void(DrawGameOver(sf::RenderWindow &p_window))
 }
 void(DrawLevelComplete(sf::RenderWindow &p_window))
 {
+
 	p_window.draw(levelCompSpr);
+	p_window.draw(oScoreTxt);
+	p_window.draw(bonusTxt);
+	p_window.draw(cScoreTxt);
 	p_window.draw(cursor);
 }
 void(DrawOptions(sf::RenderWindow &p_window))
@@ -536,6 +579,14 @@ int main()
 	livesTxt.setFont(font);
 	livesTxt.setCharacterSize(22);
 	livesTxt.setPosition(60, 60);
+
+	bonusTxt.setFont(font);
+	bonusTxt.setPosition(sf::Vector2f(220, 366));
+	bonusTxt.setString("000000000");
+
+	oScoreTxt.setFont(font);
+	oScoreTxt.setPosition(sf::Vector2f(220,270));
+	oScoreTxt.setString("000000000");
 
 
 	// Load Content
