@@ -4,6 +4,7 @@
 
 
 const char * SoundManager::BACKGROUND_MUSIC_LVL_1 = "../resources/stage1.mp3";
+const char * SoundManager::BACKGROUND_MUSIC_LVL_2 = "../resources/stage2.mp3";
 const char * SoundManager::CURSOR = "../resources/cursor.wav";
 const char * SoundManager::EXPLOSION = "../resources/exp.wav";
 const char * SoundManager::CONFIRM = "../resources/confirm.wav";
@@ -109,6 +110,9 @@ void SoundManager::Init()
 	sounds.push_back(sound);
 
 	FMODsys->createSound(GAMEOVER, FMOD_DEFAULT, 0, &sound);
+	sounds.push_back(sound);
+
+	FMODsys->createSound(BACKGROUND_MUSIC_LVL_2, FMOD_DEFAULT, 0, &sound);
 	sounds.push_back(sound);
 }
 

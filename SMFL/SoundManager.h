@@ -14,6 +14,7 @@ public:
 	enum SoundsList
 	{
 		BACKGROUND_MUSIC_LEVEL_1,
+		BACKGROUND_MUSIC_LEVEL_2,
 		CURSOR_SFX,
 		CONFIRM_SFX,
 		EXPLOSTION_SFX,
@@ -48,6 +49,7 @@ private:
 	SoundManager();
 
 	const static char* BACKGROUND_MUSIC_LVL_1;
+	const static char* BACKGROUND_MUSIC_LVL_2;
 	const static char* CURSOR;
 	const static char* EXPLOSION;
 	const static char* CONFIRM;

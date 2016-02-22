@@ -53,7 +53,7 @@ byte cursorOffset = 62;
 byte numOfHighScores = 10;
 bool updateScores = true;
 bool shakeScreen = false;
-
+int tempCurrLevelNum = 0;
 sf::Clock myClock;
 sf::Time deltaTime;
 Player player;
@@ -80,7 +80,6 @@ void ResetGame()
 	shakeScreen = false;
 	if (player.GetLivesNum() != 0)
 	{
-		int tempCurrLevelNum = level.GetLevelCount();
 		level = Level(*&m_backGroundTex, screenDimensions);
 		tempCurrLevelNum++;
 		level.ChangeLevel(tempCurrLevelNum);
@@ -98,6 +97,7 @@ void ResetGame()
 }
 void Init()
 {
+	tempCurrLevelNum = level.GetLevelCount();
 	player = Player(*&m_tex, sf::Vector2f(280, 600));
 	level = Level(*&m_backGroundTex, screenDimensions);
 	UI::Instance().Init(*&m_tex);
@@ -257,7 +257,11 @@ void(UpdateLevelComplete())
 			ResetGame();
 			cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y - cursorOffset));
 			SoundManager::Instance().StopAllSounds();
-			SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_1, 0);
+			if (tempCurrLevelNum % 2 == 0)
+				SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_1, 0);
+			else
+				SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::BACKGROUND_MUSIC_LEVEL_2, 9);
+			tempCurrLevelNum++;
 		}
 		else if (cursorNum == OPTIONS)
 		{
