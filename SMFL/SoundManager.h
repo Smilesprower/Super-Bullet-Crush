@@ -15,6 +15,7 @@ public:
 	{
 		BACKGROUND_MUSIC_LEVEL_1,
 		BACKGROUND_MUSIC_LEVEL_2,
+		EXPLOSIONB_SFX,
 		CURSOR_SFX,
 		CONFIRM_SFX,
 		EXPLOSTION_SFX,
@@ -55,6 +56,7 @@ private:
 	const static char* CONFIRM;
 	const static char* SHOOT;
 	const static char* PLAYEREXPLOSION;
+	const static char* EXPLOSIONB;
 	const static char* COMPLETE;
 	const static char* TITLE;
 	const static char* GAMEOVER;

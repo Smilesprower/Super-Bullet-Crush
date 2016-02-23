@@ -101,6 +101,7 @@
     <ClInclude Include="HomingEnemy.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="PauseSoundButton.h" />
+    <ClInclude Include="PhysicExtra.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlControls.h" />
     <ClInclude Include="ReverbButton.h" />
@@ -132,6 +133,7 @@
     <ClCompile Include="HomingEnemy.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="PauseSoundButton.cpp" />
+    <ClCompile Include="PhysicExtra.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlControls.cpp" />
     <ClCompile Include="ReverbButton.cpp" />

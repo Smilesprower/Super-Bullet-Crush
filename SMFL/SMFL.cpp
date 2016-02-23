@@ -36,6 +36,7 @@
 #include "ThreeDeeSoundButton.h"
 #include "DopplerButton.h"
 #include "PauseSoundButton.h"
+#include "PhysicExtra.h"
 
 
 // Game Modes
@@ -48,6 +49,7 @@ byte prevGameMode = gameMode;
 //////////////////
 std::vector<sf::Text> highscores(10);
 sf::RectangleShape cursor;
+int tempLives = 5;
 byte cursorNum = 1;
 int timer = 0;
 byte cursorOffset = 62;
@@ -58,6 +60,7 @@ int tempCurrLevelNum = 0;
 sf::Clock myClock;
 sf::Time deltaTime;
 Player player;
+PhysicExtra ball;
 Level level; 
 sf::Texture m_tex, m_bgTex, mainTex, highScoreTex, controllerDisconnectedTex, controlsTex, gameOverTex, levelCompTex;
 sf::Sprite m_titleSpr, highscoreSpr, disconnectedSpr, controlsSpr, gameOverSpr, levelCompSpr;
@@ -83,6 +86,7 @@ void ResetGame()
 
 	if (player.GetLivesNum() != 0)
 	{
+		tempLives = player.GetLivesNum();
 		tempCurrLevelNum++;
 		level = Level(*&m_backGroundTex, screenDimensions);
 		level.ChangeLevel(tempCurrLevelNum);
@@ -95,6 +99,9 @@ void ResetGame()
 	{
 		player = Player(*&m_tex, sf::Vector2f(280, 600));
 		tempCurrLevelNum == 0;
+		level.ChangeLevel(0);
+		player.Setlives(5);
+		level = Level(*&m_backGroundTex, screenDimensions);
 	}
 
 	BulletManager::Instance().Reset();
@@ -102,6 +109,7 @@ void ResetGame()
 }
 void Init()
 {
+	ball = PhysicExtra(sf::Vector2f(-20, 250), 22, sf::Vector2f(0, 0),m_tex);
 	tempCurrLevelNum = level.GetLevelCount();
 	player = Player(*&m_tex, sf::Vector2f(280, 600));
 	level = Level(*&m_backGroundTex, screenDimensions);
@@ -207,6 +215,22 @@ void(UpdateMainMenu())
 			SoundManager::Instance().PlaySFX(SoundManager::SoundsList::CONFIRM_SFX);
 		}
 	}
+
+	if (!ball.m_update)
+	{
+		if (PlControls::Instance().m_buttons.at(3) && PlControls::Instance().m_buttons.at(3) != PlControls::Instance().m_buttonsPrev.at(3))
+		{
+			ball.SetPos(sf::Vector2f(-100, 400));
+			ball.SetVel(sf::Vector2f(500, -400));
+			ball.m_update = true;
+		}
+	}
+	if (ball.m_update)
+	{
+		ball.Update(deltaTime.asSeconds());
+		if (ball.GetPosition().x > 600 || ball.GetPosition().y > 800)
+			ball.m_update = false;
+	}
 }
 void(UpdateGame())
 {
@@ -232,8 +256,8 @@ void(UpdateGame())
 
 	if (EnemyManager::Instance().GetBoss()->CheckIfExploding())
 	{
-		timer += deltaTime.asSeconds();
-		if (timer > 1)
+		timer += 1;
+		if (timer > 15)
 		{
 			timer = 0;
 			SoundManager::Instance().PlaySFX(SoundManager::PLAYEREXPLOSION_SFX);
@@ -288,7 +312,9 @@ void(UpdateLevelComplete())
 			gameMode = MAINMENU;
 			cursor.setPosition(sf::Vector2f(cursor.getPosition().x, cursor.getPosition().y + cursorOffset * -2));
 			SoundManager::Instance().StopAllSounds();
+			SoundManager::Instance().PlaySFX(SoundManager::SoundsList::CONFIRM_SFX);
 			SoundManager::Instance().PlaySoundBG(SoundManager::SoundsList::TITLE_SFX, 7);
+			player.Setlives(0);
 			ResetGame();
 			cScoreTxt.setPosition(40, 30);
 			cScoreTxt.setCharacterSize(22);
@@ -345,6 +371,9 @@ void(DrawMainMenu(sf::RenderWindow &p_window))
 {
 	p_window.draw(m_titleSpr);
 	p_window.draw(cursor);
+
+	if (ball.m_update)
+		p_window.draw(ball.GetShape());
 }
 void(DrawGame(sf::RenderWindow &p_window, sf::View &p_view))
 {
@@ -388,17 +417,18 @@ void(DrawGame(sf::RenderWindow &p_window, sf::View &p_view))
 		p_window.setView(p_view);
 		gameMode = LEVELCOMPLETE;
 		cursor.setPosition(sf::Vector2f(cursor.getPosition().x, 536 + cursorOffset));
-		if (player.GetLivesNum() == 5)
+		if (player.GetLivesNum() == tempLives)
 		{
 			oScoreTxt.setString(cScoreTxt.getString());
-			bonusTxt.setString("000005000");
+			bonusTxt.setString(std::to_string(5000 * tempLives));
+			bonusTxt.setString(std::string(9 - bonusTxt.getString().getSize(), '0') + std::to_string(5000 * tempLives));
 			std::string tempx = oScoreTxt.getString();
 			int temp1 = std::stoi(tempx);
 
 			std::string tempy = bonusTxt.getString();
 			int temp2 = std::stoi(tempy);
 			int result = temp1 + temp2;
-			Score::Instance().currentScore += 5000;
+			Score::Instance().currentScore += 5000 * tempLives;
 			cScoreTxt.setString(std::string(9 - std::to_string(result).size(), '0') + std::to_string(result));
 		}
 		else
@@ -558,7 +588,7 @@ int main()
 	//window.setFramerateLimit(60);
 	window.setVerticalSyncEnabled(true);
 
-	cursor.setOutlineColor(sf::Color::White);
+	cursor.setOutlineColor(sf::Color::Red);
 	cursor.setOutlineThickness(3);
 	cursor.setFillColor(sf::Color::Transparent);
 	cursor.setSize(sf::Vector2f(220, 40));
