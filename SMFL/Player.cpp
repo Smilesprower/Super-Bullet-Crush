@@ -76,7 +76,7 @@ m_weaponType(BulletManager::WeaponType::BLASTER)
 	///////////////////////////////
 	sf::Sprite temp;
 	temp.setTexture(p_tex);
-	temp.setTextureRect(sf::IntRect(68, 134, 20, 20));
+	temp.setTextureRect(sf::IntRect(41, 89, 20, 20));
 
 	m_towers.push_back(Tower(temp, sf::Vector2f(m_position.x - 20, m_position.y + 40), true));
 	m_towers.push_back(Tower(temp, sf::Vector2f(m_position.x + 64, m_position.y + 40), true));
@@ -313,7 +313,7 @@ void Player::UpdateDead(float p_dt)
 
 	sf::Sprite temp;
 	temp.setTexture(*m_tex);
-	temp.setTextureRect(sf::IntRect(68, 134, 20, 20));
+	temp.setTextureRect(sf::IntRect(41, 89, 20, 20));
 	m_towers.clear();
 	m_towers.push_back(Tower(temp, sf::Vector2f(m_position.x - 20, m_position.y + 40), true));
 	m_towers.push_back(Tower(temp, sf::Vector2f(m_position.x + 64, m_position.y + 40), true));

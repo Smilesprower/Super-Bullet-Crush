@@ -438,18 +438,16 @@ void(DrawGame(sf::RenderWindow &p_window, sf::View &p_view))
 		}
 		cScoreTxt.setPosition(220, 460);
 		cScoreTxt.setCharacterSize(30);
-
-		if (!shakeScreen)
-		{
-			if (EnemyManager::Instance().GetBoss()->CheckIfExploding())
-				shakeScreen = true;
-		}
-		else
-		{
-			p_view.reset(sf::FloatRect(rand() % 21 + (-10), rand() % 21 + (-10), 600, 800));
-			p_window.setView(p_view);
-		}
-
+	}
+	if (!shakeScreen)
+	{
+		if (EnemyManager::Instance().GetBoss()->CheckIfExploding())
+			shakeScreen = true;
+	}
+	else
+	{
+		p_view.reset(sf::FloatRect(rand() % 21 + (-10), rand() % 21 + (-10), 600, 800));
+		p_window.setView(p_view);
 	}
 
 }

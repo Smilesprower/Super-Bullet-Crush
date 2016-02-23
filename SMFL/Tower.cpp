@@ -41,7 +41,7 @@ void Tower::Update(sf::Vector2f p_velocity)
 
 sf::Vector2f Tower::getOrigin(float p_radius)
 {
-	return sf::Vector2f(m_position.x + (m_size * 0.5) - p_radius, m_position.y + (m_size * 0.5) - p_radius);
+	return sf::Vector2f(m_position.x + 8 - p_radius, m_position.y + (m_size * 0.5) - p_radius);
 }
 
 int Tower::getSize()

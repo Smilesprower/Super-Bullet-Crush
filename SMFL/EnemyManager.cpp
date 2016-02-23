@@ -11,9 +11,9 @@
 
 bool hasHomingSpawned = false;
 
-const sf::IntRect EnemyManager::m_HOMING_ENEM_COORDS = sf::IntRect(0, 409, 56, 60);
-const sf::IntRect EnemyManager::m_SLOW_SHOOTY_ENEM_COORDS = sf::IntRect(0, 352, 64, 56);
-const sf::IntRect EnemyManager::m_WAVE_ENEM_COORS = sf::IntRect(0, 301, 58, 50);
+const sf::IntRect EnemyManager::m_HOMING_ENEM_COORDS = sf::IntRect(0, 409, 60, 64);
+const sf::IntRect EnemyManager::m_SLOW_SHOOTY_ENEM_COORDS = sf::IntRect(460, 8, 68, 59);
+const sf::IntRect EnemyManager::m_WAVE_ENEM_COORS = sf::IntRect(0, 301, 62, 53);
 const sf::IntRect EnemyManager::m_BOSS_COORDS = sf::IntRect(102, 299, 450, 200);
 
 int counter = 0;
