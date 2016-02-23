@@ -14,7 +14,7 @@ bool hasHomingSpawned = false;
 const sf::IntRect EnemyManager::m_HOMING_ENEM_COORDS = sf::IntRect(0, 409, 60, 64);
 const sf::IntRect EnemyManager::m_SLOW_SHOOTY_ENEM_COORDS = sf::IntRect(460, 8, 68, 59);
 const sf::IntRect EnemyManager::m_WAVE_ENEM_COORS = sf::IntRect(0, 301, 62, 53);
-const sf::IntRect EnemyManager::m_BOSS_COORDS = sf::IntRect(102, 299, 450, 200);
+const sf::IntRect EnemyManager::m_BOSS_COORDS = sf::IntRect(102, 299, 450, 224);
 
 int counter = 0;
 bool isGoingRight = (counter % 2);
